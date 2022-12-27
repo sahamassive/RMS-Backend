@@ -15,13 +15,9 @@ class CreateSectionsTable extends Migration
     {
         Schema::create('sections', function (Blueprint $table) {
             $table->id();
-            $table->string('section_id');
             $table->string('name');
             $table->string('description')->nullable();
-            $table->string('meta-tag');
-            $table->string('meta-description');
-            $table->string('meta-keyword');
-            $table->rememberToken();
+            $table->tinyInteger('status')->default(1);
             $table->timestamps();
         });
     }

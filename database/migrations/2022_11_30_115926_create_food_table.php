@@ -15,18 +15,22 @@ class CreateFoodTable extends Migration
     {
         Schema::create('food', function (Blueprint $table) {
             $table->id();
-            $table->string('category_id');
-            $table->string('recipe_id');
-            $table->string('food_review_id');
+            $table->integer('section_id');
+            $table->integer('category_id');
+            $table->integer('recipe_id');
+            $table->integer('brand_id')->nullable();
+            $table->integer('food_review_id');
             $table->string('name');
-            $table->string('image');
+            $table->string('image')->nullable();
+            $table->string('video')->nullable();
             $table->string('description')->nullable();
-            $table->string('speicality')->nullable();
-            $table->integer('price');
-            $table->string('meta-tag');
-            $table->string('meta-description');
-            $table->string('meta-keyword');
-            $table->rememberToken();
+            $table->string('speciality')->nullable();
+            $table->string('price');
+            $table->string('discount');
+            $table->string('meta_title');
+            $table->string('meta_description');
+            $table->string('meta_keywords');
+            $table->tinyInteger('status');
             $table->timestamps();
         });
     }

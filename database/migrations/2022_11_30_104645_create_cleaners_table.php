@@ -29,7 +29,7 @@ class CreateCleanersTable extends Migration
             $table->string('state');
             $table->string('zip_code');
             $table->integer('salary');
-            $table->rememberToken();
+            $table->tinyInteger('status')->default(0);
             $table->timestamps();
         });
     }

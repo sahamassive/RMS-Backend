@@ -15,22 +15,14 @@ class CreateAdminsTable extends Migration
     {
         Schema::create('admins', function (Blueprint $table) {
             $table->id();
-            $table->string('admin_id');
-            $table->string('image');
             $table->string('first_name');
             $table->string('last_name');
+            $table->string('type');
+            $table->string('admin_type_id')->default(0);
             $table->string('email')->unique();
             $table->string('phone')->unique();
-            $table->string('nid')->unique();
-            $table->date('birth_date');
-            $table->date('joining_date');
-            $table->date('resign_date');
-            $table->string('address');
-            $table->string('city');
-            $table->string('state');
-            $table->string('zip_code');
-            $table->integer('salary');
-            $table->rememberToken();
+            $table->string('nid')->unique();$table->string('image');
+            $table->tinyInteger('status');
             $table->timestamps();
         });
     }

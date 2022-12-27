@@ -30,6 +30,7 @@ class CreateManagersTable extends Migration
             $table->string('state');
             $table->string('zip_code');
             $table->integer('salary');
+            $table->tinyInteger('status')->default(0);
             $table->rememberToken();
             $table->timestamps();
         });

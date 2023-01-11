@@ -22,9 +22,8 @@ use Illuminate\Support\Facades\Session;
 class CategoryController extends Controller
 {
     public function categories(){
-        Session::put('page','categories');
-        $categories = Category::with(['section','parentcategory'])->get()->toArray();
-        return view('admin.categories.categories')->with(compact('categories')); 
+        $categories = Category::get()->toArray();
+        return response()->json($categories);
     }
 
     public function updateCategoryStatus(Request $request){
@@ -135,5 +134,37 @@ class CategoryController extends Controller
 
             return view('admin.categories.append_categories_level')->with(compact('getCategories'));
         }
+    }
+    public function categoryInsert(Request $request){
+                  
+       
+
+        // if($request->has('category_image')) {
+
+        //     $image = $request->file('category_image');
+       
+        //     $name_gen = hexdec(uniqid());
+        //     $img_ext = strtolower($image->getClientOriginalExtension());
+        //     $img_name = $name_gen . "." . $img_ext;
+        //     $up_location = 'category_image/';
+        //     $filename = $up_location . $img_name;
+        //     $image->move($up_location, $img_name);
+
+                
+        //     }
+        $category=new Category();
+        $category->category_name = $request->category_name;
+        $category->section_id=$request->section_id;
+        $category->parent_id = $request->parent_id;
+        $category->category_image = 'no-image';
+        $category->category_discount = $request->category_discount;
+        $category->description = $request->description;
+        $category->url = $request->url;
+        $category->meta_title = $request->meta_title;
+        $category->meta_description = $request->meta_description;
+        $category->meta_keywords = $request->meta_keywords;
+        $category->status = $request->status;
+        $category->save();
+
     }
 }

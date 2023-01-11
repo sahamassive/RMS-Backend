@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Category extends Model
 {
@@ -18,4 +19,5 @@ class Category extends Model
     public function subcategories(){
         return $this->hasmany('App\Models\Category','parent_id')->where('status',1);
     }
+  
 }

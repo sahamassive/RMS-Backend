@@ -23,14 +23,14 @@ class SectionController extends Controller
     public function sections(){
         //Session::put('page','section');
         $sections = Section::get()->toArray();
-        return view('admin.sections.sections')->with(compact('sections'));
+         return response()->json($sections);
     }
 
     public function updateSectionStatus(Request $request){
         if($request->ajax()){
             $data = $request->all();
             // echo "<pre>"; print_r($data);die;
-            if ($data['status']== 'Active') {
+            if ($data['status'] == 'Active') {
                 $status = 0;
             }
             else{
@@ -73,8 +73,51 @@ class SectionController extends Controller
 
             return redirect('admin/sections')->with('success',$message);
         }
+
+        
         
         return view('admin.sections.add-edit-section')->with(compact('title','section'));
+    }
+    public function sectionInsert(Request $request){
+
+  
+           $section=new Section();
+           $section->name = $request->section_name;
+           $section->status = 0;
+           $section->description = 1;
+           $section->save();
+
+       return response()->json([
+        'msg'=>'Section Inserted Successfully'
+       ]);
+    }
+    public function sectionEdit($id){
+        $data=Section::findOrfail($id);
+        return response()->json($data);
+    }
+    public function sectionUpdate(Request $request,$id){
+        $section=Section::findOrfail($id);
+        $section->name=$request->section_name;
+        $section->update();
+        return response()->json([
+            'msg'=>'Section Updated Successfully'
+           ]);
+    }
+    public function sectionStatus($id){
+        $data=Section::where('id',$id)->first();
+        if($data->status==1){
+            $data->status=0;
+            $data->update();
+            return response()->json([
+                'msg'=>'Section Status Update'
+               ]);
+        }else{
+            $data->status=1;
+            $data->update();
+            return response()->json([
+                'msg'=>'Section Status Update'
+               ]); 
+        }
     }
 }
 

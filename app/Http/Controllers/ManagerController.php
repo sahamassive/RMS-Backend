@@ -2,8 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Chef;
+use App\Models\Cleaner;
 use App\Models\Manager;
+use App\Models\data;
+use App\Models\Delivery_man;
+use App\Models\Waiter;
 use Illuminate\Http\Request;
+use Image;
 
 class ManagerController extends Controller
 {
@@ -33,11 +39,7 @@ class ManagerController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        //
-    }
-
+   
     /**
      * Display the specified resource.
      *

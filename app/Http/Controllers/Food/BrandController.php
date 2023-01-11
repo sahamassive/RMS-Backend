@@ -5,12 +5,16 @@ namespace App\Http\Controllers\Food;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Brand;
+use Illuminate\Support\Facades\File;
+
 
 class BrandController extends Controller
 {
-    public function view(){
+    public function brand(){
         $brands = Brand::get()->toArray();
-        return($brands);
+    
+       
+        return response()->json($brands);
     }
     public function updateBrandStatus(Request $request){
         if($request->ajax()){
@@ -60,4 +64,76 @@ class BrandController extends Controller
         
         return (compact('title','brand'));
     }
+    public function brandInsert(Request $request){
+      
+
+
+        
+
+     
+           
+  
+            $brand=new Brand();
+            $brand->name = $request->name;
+            $brand->status = 0;
+            $image=$request->file('image');
+            if($image){
+                $name_gen = hexdec(uniqid());
+                $img_ext = strtolower($image->getClientOriginalExtension());
+                $img_name = $name_gen . "." . $img_ext;
+                $up_location = 'brand/';
+                $image_up = $up_location . $img_name;
+                $image->move($up_location, $img_name);
+                $brand->logo=$image_up;
+
+            }
+            $brand->save();
+            return response()->json([
+                'msg'=>'Brand Inserted Successfully'
+               ]);
+           
+    }
+    public function brandEdit($id){
+        $data=Brand::findOrfail($id);
+        return response()->json($data);
+    }
+    public function brandUpdate(Request $request,$id){
+        $brand=Brand::findOrfail($id);
+        $brand->name=$request->name;
+        $image=$request->file('image');
+        if($image){
+            $name_gen = hexdec(uniqid());
+            $img_ext = strtolower($image->getClientOriginalExtension());
+            $img_name = $name_gen . "." . $img_ext;
+            $up_location = 'brand/';
+            $image_up = $up_location . $img_name;
+            $image->move($up_location, $img_name);
+            $path = public_path('/' . $brand->logo);
+            if (File::exists($path)) {
+                @unlink($path);
+            }
+            $brand->logo=$image_up;
+        }
+        $brand->update();
+        return response()->json([
+            'msg'=>'Brand Updated Successfully'
+           ]);
+    }
+    public function brandStatus($id){
+        $data=Brand::where('id',$id)->first();
+        if($data->status==1){
+            $data->status=0;
+            $data->update();
+            return response()->json([
+                'msg'=>'Section Status Update'
+               ]);
+        }else{
+            $data->status=1;
+            $data->update();
+            return response()->json([
+                'msg'=>'Section Status Update'
+               ]); 
+        }
+    }
+
 }

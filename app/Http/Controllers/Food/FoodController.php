@@ -10,19 +10,35 @@ use App\Models\Section;
 use App\Models\Brand;
 use Auth;
 use Image;
+use Illuminate\Support\Facades\DB;
+
 class FoodController extends Controller
 {
     public function foods(){
-        Session::put('page','products');
-        //$products = Product::with(['section','category'])->get()->toArray();
-        $products = Product::with(['section'=>function($query){
-            $query->select('id','name');
-        },'category'=>function($query){
-            $query->select('id','category_name');
-        },'brand'])->get()->toArray();
-        //dd($products);
-        return view('admin.products.products')->with(compact('products')); 
+        $food=DB::table('food')
+                  ->join('sections','sections.id','food.section_id')
+                  ->join('categories','categories.id','food.category_id')
+                  ->join('brands','brands.id','food.brand_id')
+                  ->select('food.*','sections.name as section_name','categories.category_name','brands.name as brand_name')
+                  ->get();
+        return response()->json($food);
+       
     }
+
+    public function quickfoods(){
+        $foods = Food::get()->toArray();
+        return response()->json($foods);
+    }
+    public function foodByCategory($id){
+        $foods = Food::where('category_id',$id)->get()->toArray();
+        return response()->json($foods);
+    }
+    public function foodEdit($id){
+        $foods = Food::findOrfail($id);
+        return response()->json($foods);
+    }
+    
+    
 
     public function updateFoodStatus(Request $request){
         if($request->ajax()){
@@ -211,5 +227,50 @@ class FoodController extends Controller
         $food = Food::findorFail($id);
         //dd($food);
         return view('admin.attributes.add_edit_attributes')->with(compact('food'));
+    }
+
+    public function foodInsert(Request $request){
+        $food=new Food();
+        $food->section_id=$request->section_id;
+        $food->category_id=$request->category_id;
+        $food->brand_id=$request->brand_id;
+        $food->recipe_id=1;
+        $food->food_review_id=1;
+        $food->name=$request->name;
+        $food->description=$request->description;
+        $food->speciality=$request->speciality;
+        $food->price=$request->price;
+        $food->meta_title=$request->meta_title;
+        $food->meta_description=$request->meta_description;
+        $food->meta_keywords=$request->meta_keywords;
+        $image=$request->file('image');
+        if($image){
+            // $name_gen = hexdec(uniqid());
+            // $img_ext = strtolower($image->getClientOriginalExtension());
+            // $img_name = $name_gen . "." . $img_ext;
+            // $up_location = 'foods/';
+            // $image_up = $up_location . $img_name;
+            // $image->move($up_location, $img_name);
+            // $food->image=$image_up;
+
+            $extension = $image->getClientOriginalExtension();
+            //Generate New Image Name
+            $imageName = rand(111,99999).'.'.$extension;
+            $largeimagePath =public_path('foods/large/'.$imageName);
+            $mediumimagePath=public_path('foods/medium/'.$imageName);
+            $smallimagePath =public_path('foods/small/'.$imageName);
+
+         Image::make($image)->resize(1000,1000)->save($largeimagePath);
+         Image::make($image)->resize(500,500)->save($mediumimagePath);
+         Image::make($image)->resize(250,250)->save($smallimagePath);
+         $food->image = $imageName;
+
+
+        }
+        $food->save();
+        return response()->json([
+            'msg'=>'Food Inserted Successfully'
+           ]);
+
     }
 }

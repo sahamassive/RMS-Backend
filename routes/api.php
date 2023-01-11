@@ -2,7 +2,11 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\BrandController;
+use App\Http\Controllers\Food\BrandController;
+use App\Http\Controllers\Food\SectionController;
+use App\Http\Controllers\Food\CategoryController;
+use App\Http\Controllers\Food\FoodController;
+use App\Http\Controllers\HrController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,23 +23,30 @@ use App\Http\Controllers\BrandController;
 //     return $request->user();
 // });
 //Brands
-Route::get('brand',[BrandController::class,'view'])->name('view-brand');
+Route::get('brands',[BrandController::class,'brand']);
 Route::post('update-brand-status',[BrandController::class,'updateBrandStatus']);
 //brand delete
 Route::get('brand-delete/{id}',[BrandController::class,'deleteBrand'])->name('deleteBrand');
 //brand Add & Update
 Route::match(['get', 'post'], 'brand-add-edit/{id?}',[BrandController::class,'add_edit_brand']);
+Route::post('brand-insert',[BrandController::class,'brandInsert']);
+Route::get('brand-status/{id}',[BrandController::class,'brandStatus']);
+Route::get('brand-edit/{id}',[BrandController::class,'brandEdit']);
+Route::post('brand-update/{id}',[BrandController::class,'brandUpdate']);
 
 
 //Sections
 
-Route::get('sections',[SectionController::class,'sections'])->name('admin.view-section');
+Route::get('sections',[SectionController::class,'sections']);
 Route::post('update-section-status',[SectionController::class,'updateSectionStatus']);
 //section delete
 Route::get('section-delete/{id}',[SectionController::class,'deleteSection'])->name('deleteSection');
 //section Add & Update
 Route::match(['get', 'post'], 'section-add-edit/{id?}',[SectionController::class,'add_edit_section']);
-
+Route::post('section-insert',[SectionController::class,'sectionInsert']);
+Route::get('section-edit/{id}',[SectionController::class,'sectionEdit']);
+Route::post('section-update/{id}',[SectionController::class,'sectionUpdate']);
+Route::get('section-status/{id}',[SectionController::class,'sectionStatus']);
 // Categories
 
 Route::get('categories',[CategoryController::class,'categories'])->name('admin.view-categories');
@@ -45,6 +56,26 @@ Route::get('category-delete/{id}',[CategoryController::class,'deleteCategory'])-
 //categorie Add & Update
 Route::match(['get', 'post'], 'category-add-edit/{id?}',[CategoryController::class,'add_edit_category']);
 Route::get('append-categories-level',[CategoryController::class,'appendCategoryLevel']);
+Route::post('category-insert',[CategoryController::class,'categoryInsert']);
+
+
+//food 
+Route::post('food-insert',[FoodController::class,'foodInsert']);
+Route::get('foods',[FoodController::class,'foods']);
+Route::get('quick-foods',[FoodController::class,'quickfoods']);
+Route::get('category-foods/{id}',[FoodController::class,'foodByCategory']);
+Route::get('food-edit/{id}',[FoodController::class,'foodEdit']);
+
+//Employee
+Route::post('employee-insert',[HrController::class,'employeeInsert']);
+Route::get('get-employee/{filter}',[HrController::class,'getEmployee']);
+Route::post('department-insert',[HrController::class,'departmentInsert']);
+Route::get('departments',[HrController::class,'getDepartment']);
+
+
+
+
+
 
 // Product
 

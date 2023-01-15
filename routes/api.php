@@ -7,6 +7,7 @@ use App\Http\Controllers\Food\SectionController;
 use App\Http\Controllers\Food\CategoryController;
 use App\Http\Controllers\Food\FoodController;
 use App\Http\Controllers\HrController;
+use App\Http\Controllers\RestaurantController;
 
 /*
 |--------------------------------------------------------------------------
@@ -73,10 +74,6 @@ Route::post('department-insert',[HrController::class,'departmentInsert']);
 Route::get('departments',[HrController::class,'getDepartment']);
 
 
-
-
-
-
 // Product
 
 Route::get('products',[ProductController::class,'products'])->name('admin.view-products');
@@ -93,3 +90,11 @@ Route::get('product-add-edit/product-video-delete/{id}',[ProductController::clas
 Route::match(['get', 'post'], 'product-add-edit/{id?}',[ProductController::class,'add_edit_product']);
 // Products Attribute Add
 Route::match(['get', 'post'], 'product-add-edit-attribute/{id}',[ProductController::class,'addAttributes']);
+
+
+//restaurant
+Route::post('restaurant-insert',[RestaurantController::class,'restaurantInsert']);
+Route::get('restaurants',[RestaurantController::class,'index']);
+Route::get('restaurant-status/{id}',[RestaurantController::class,'restaurantStatus']);
+Route::get('restaurant-edit/{id}',[RestaurantController::class,'editRestaurant']);
+Route::post('restaurant-edit/{id}',[RestaurantController::class,'updateRestaurant']);

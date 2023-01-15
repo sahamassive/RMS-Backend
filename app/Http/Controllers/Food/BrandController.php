@@ -16,6 +16,7 @@ class BrandController extends Controller
        
         return response()->json($brands);
     }
+
     public function updateBrandStatus(Request $request){
         if($request->ajax()){
             $data = $request->all();
@@ -30,11 +31,13 @@ class BrandController extends Controller
             return response()->json(['status'=>$status,'brand_id'=> $data['brand_id']]);
         }
     }
+
     public function deleteBrand($id){
         Brand::where('id',$id)->delete();
         $message  = "Brand Delete Successfully Done";
         return ($message);
     }
+    
     public function add_edit_brand(Request $request,$id = null ){
         Session::put('page','brand');
         if($id==''){
@@ -65,14 +68,6 @@ class BrandController extends Controller
         return (compact('title','brand'));
     }
     public function brandInsert(Request $request){
-      
-
-
-        
-
-     
-           
-  
             $brand=new Brand();
             $brand->name = $request->name;
             $brand->status = 0;

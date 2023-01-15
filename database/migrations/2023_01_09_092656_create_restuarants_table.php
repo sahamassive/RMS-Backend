@@ -15,6 +15,18 @@ class CreateRestuarantsTable extends Migration
     {
         Schema::create('restuarants', function (Blueprint $table) {
             $table->id();
+            $table->string('restaurant_name');
+            $table->string('phone');
+            $table->string('email');
+            $table->string('country');
+            $table->string('state');
+            $table->string('city');
+            $table->string('address');
+            $table->string('meta_tag');
+            $table->string('meta_description');
+            $table->string('meta_keyword');
+            $table->string('logo');
+            $table->boolean('status')->default(false);
             $table->timestamps();
         });
     }

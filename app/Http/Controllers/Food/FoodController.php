@@ -16,13 +16,12 @@ class FoodController extends Controller
 {
     public function foods(){
         $food=DB::table('food')
-                  ->join('sections','sections.id','food.section_id')
-                  ->join('categories','categories.id','food.category_id')
-                  ->join('brands','brands.id','food.brand_id')
-                  ->select('food.*','sections.name as section_name','categories.category_name','brands.name as brand_name')
-                  ->get();
+                    ->join('sections','sections.id','food.section_id')
+                    ->join('categories','categories.id','food.category_id')
+                    ->join('brands','brands.id','food.brand_id')
+                    ->select('food.*','sections.name as section_name','categories.category_name','brands.name as brand_name')
+                    ->get();
         return response()->json($food);
-       
     }
 
     public function quickfoods(){
@@ -131,7 +130,7 @@ class FoodController extends Controller
              $data = $request->all();
              // echo "<pre>"; print_r(Auth::guard('admin')->user()); die;
 
-              $rules = [
+              $rules = [ 
                   'category_id'=>'required',
                   'product_name'=>'required|regex:/^[\pL\s\-]+$/u',
                   'product_code'=>'required|regex:/^\w+$/',
@@ -212,7 +211,7 @@ class FoodController extends Controller
                 $product->status = 1;
                 $product->save();
 
-             return redirect('admin/products')->with('success',$message);
+            return redirect('admin/products')->with('success',$message);
         }
         //Get sections with categories & subcategories
         $categories = Section::with('category')->get()->toArray();
@@ -231,8 +230,9 @@ class FoodController extends Controller
 
     public function foodInsert(Request $request){
         $food=new Food();
+        
         $food->section_id=$request->section_id;
-        $food->category_id=$request->category_id;
+        $food->category_id=$request->category_id;  
         $food->brand_id=$request->brand_id;
         $food->recipe_id=1;
         $food->food_review_id=1;
@@ -251,7 +251,7 @@ class FoodController extends Controller
             // $up_location = 'foods/';
             // $image_up = $up_location . $img_name;
             // $image->move($up_location, $img_name);
-            // $food->image=$image_up;
+            // $food->image=$image_up;        
 
             $extension = $image->getClientOriginalExtension();
             //Generate New Image Name
@@ -260,17 +260,17 @@ class FoodController extends Controller
             $mediumimagePath=public_path('foods/medium/'.$imageName);
             $smallimagePath =public_path('foods/small/'.$imageName);
 
-         Image::make($image)->resize(1000,1000)->save($largeimagePath);
-         Image::make($image)->resize(500,500)->save($mediumimagePath);
-         Image::make($image)->resize(250,250)->save($smallimagePath);
-         $food->image = $imageName;
+            Image::make($image)->resize(1000,1000)->save($largeimagePath);
+            Image::make($image)->resize(500,500)->save($mediumimagePath);
+            Image::make($image)->resize(250,250)->save($smallimagePath);
+            $food->image = $imageName;
 
 
         }
         $food->save();
         return response()->json([
             'msg'=>'Food Inserted Successfully'
-           ]);
+            ]);
 
+        }
     }
-}

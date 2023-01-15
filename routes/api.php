@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BookingController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Food\BrandController;
@@ -65,6 +66,7 @@ Route::get('foods',[FoodController::class,'foods']);
 Route::get('quick-foods',[FoodController::class,'quickfoods']);
 Route::get('category-foods/{id}',[FoodController::class,'foodByCategory']);
 Route::get('food-edit/{id}',[FoodController::class,'foodEdit']);
+Route::get('sp-foods',[FoodController::class,'spFoods']);
 
 //Employee
 Route::post('employee-insert',[HrController::class,'employeeInsert']);
@@ -73,7 +75,10 @@ Route::post('department-insert',[HrController::class,'departmentInsert']);
 Route::get('departments',[HrController::class,'getDepartment']);
 
 
+//booking
 
+Route::post('booking-insert',[BookingController::class,'bookingInsert']);
+Route::get('bookings',[BookingController::class,'getBooking']);
 
 
 

@@ -29,6 +29,10 @@ class FoodController extends Controller
         $foods = Food::get()->toArray();
         return response()->json($foods);
     }
+    public function spFoods(){
+        $foods = Food::where('status','1')->get()->toArray();
+        return response()->json($foods);
+    }
     public function foodByCategory($id){
         $foods = Food::where('category_id',$id)->get()->toArray();
         return response()->json($foods);

@@ -62,7 +62,7 @@ class SectionController extends Controller
         if($request->isMethod('post')){
             $data = $request->all();
 
-             $rules = [
+            $rules = [
                 'section_name'=>'required|regex:/^[\pL\s\-]+$/u',
                 ];
                 $this->validate($request,$rules);

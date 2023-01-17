@@ -9,6 +9,7 @@ use App\Http\Controllers\Food\CategoryController;
 use App\Http\Controllers\Food\FoodController;
 use App\Http\Controllers\HrController;
 use App\Http\Controllers\RestaurantController;
+use App\Http\Controllers\BranchController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,7 +39,6 @@ Route::post('brand-update/{id}',[BrandController::class,'brandUpdate']);
 
 
 //Sections
-
 Route::get('sections',[SectionController::class,'sections']);
 Route::post('update-section-status',[SectionController::class,'updateSectionStatus']);
 //section delete
@@ -75,16 +75,12 @@ Route::get('get-employee/{filter}',[HrController::class,'getEmployee']);
 Route::post('department-insert',[HrController::class,'departmentInsert']);
 Route::get('departments',[HrController::class,'getDepartment']);
 
-
-
+//booking
 Route::post('booking-insert',[BookingController::class,'bookingInsert']);
 Route::get('bookings',[BookingController::class,'getBooking']);
 
 
-
-
 // Product
-
 Route::get('products',[ProductController::class,'products'])->name('admin.view-products');
 Route::post('update-product-status',[ProductController::class,'updateProductStatus']);
 
@@ -104,6 +100,14 @@ Route::match(['get', 'post'], 'product-add-edit-attribute/{id}',[ProductControll
 //restaurant
 Route::post('restaurant-insert',[RestaurantController::class,'restaurantInsert']);
 Route::get('restaurants',[RestaurantController::class,'index']);
+Route::get('/restaurant/branchs/{restaurant_id}',[RestaurantController::class,'allRestaurantsBranches']);
 Route::get('restaurant-status/{id}',[RestaurantController::class,'restaurantStatus']);
 Route::get('restaurant-edit/{id}',[RestaurantController::class,'editRestaurant']);
 Route::post('restaurant-edit/{id}',[RestaurantController::class,'updateRestaurant']);
+
+//branch
+Route::post('branch-insert',[BranchController::class,'branchInsert']);
+Route::get('branchs',[BranchController::class,'index']);
+Route::get('branch-status/{id}',[BranchController::class,'branchStatus']);
+Route::get('branch-edit/{id}',[BranchController::class,'editBranch']);
+Route::post('branch-edit/{id}',[BranchController::class,'updateBranch']);

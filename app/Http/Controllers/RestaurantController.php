@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Restuarant;
 use Image;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\DB;
 
 class RestaurantController extends Controller
 {
@@ -42,6 +43,8 @@ class RestaurantController extends Controller
                 Image::make($image)->resize(500,500)->save($mediumimagePath);
                 Image::make($image)->resize(250,250)->save($smallimagePath);
 
+                
+                $data->restaurant_id = uniqid();
                 $data->restaurant_name = $request->restaurant_name;
                 $data->phone = $request->phone;
                 $data->email = $request->email;
@@ -153,5 +156,16 @@ class RestaurantController extends Controller
             //success message
             'msg'=>'Updated Successfully'
         ]);
+    }
+
+    //all Restaurants Branches
+    public function allRestaurantsBranches($restaurant_id){
+        //fetch data from database
+        $data = DB::table('branches')
+                    ->join('restuarants', 'branches.restaurant_id', '=', 'restuarants.restaurant_id')
+                    ->select('branches.*', 'restuarants.restaurant_name')
+                    ->where('branches.restaurant_id', $restaurant_id)
+                    ->get();
+        return response()->json($data);
     }
 }

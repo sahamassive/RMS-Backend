@@ -105,9 +105,17 @@ Route::get('restaurant-status/{id}',[RestaurantController::class,'restaurantStat
 Route::get('restaurant-edit/{id}',[RestaurantController::class,'editRestaurant']);
 Route::post('restaurant-edit/{id}',[RestaurantController::class,'updateRestaurant']);
 
+Route::get('restaurant/{id}',[RestaurantController::class,'getRestaurant']);
+
+
+
+
+
+
 //branch
 Route::post('branch-insert',[BranchController::class,'branchInsert']);
 Route::get('branchs',[BranchController::class,'index']);
 Route::get('branch-status/{id}',[BranchController::class,'branchStatus']);
 Route::get('branch-edit/{id}',[BranchController::class,'editBranch']);
 Route::post('branch-edit/{id}',[BranchController::class,'updateBranch']);
+

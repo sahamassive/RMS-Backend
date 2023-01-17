@@ -16,6 +16,12 @@ class RestaurantController extends Controller
         return response()->json($restaurants);
     }
 
+    //single Restaurant
+    public function getRestaurant($id){
+        $data= Restuarant::where('resturant_id',$id)->first();
+        return response()->json($data);
+    }
+
     //new restaurant insert request
     public function restaurantInsert(Request $request){
         //create new restaurant object

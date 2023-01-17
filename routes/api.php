@@ -107,3 +107,8 @@ Route::get('restaurants',[RestaurantController::class,'index']);
 Route::get('restaurant-status/{id}',[RestaurantController::class,'restaurantStatus']);
 Route::get('restaurant-edit/{id}',[RestaurantController::class,'editRestaurant']);
 Route::post('restaurant-edit/{id}',[RestaurantController::class,'updateRestaurant']);
+Route::get('restaurant/{id}',[RestaurantController::class,'getRestaurant']);
+
+
+
+

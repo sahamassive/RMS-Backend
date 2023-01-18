@@ -24,17 +24,41 @@ class FoodController extends Controller
         return response()->json($food);
     }
 
-    public function quickfoods(){
-        $foods = Food::get()->toArray();
-        return response()->json($foods);
+    public function quickfoods($id,$bid){
+        if($bid==$id){
+            $foods = Food::where('restaurant_id',$id)->get()->toArray();
+            return response()->json($foods);
+        }else{
+            $foods = DB::table('food')
+            ->join('branch_food','branch_food.food_id','food.id')
+            ->select('food.*')
+            ->where('branch_food.branch_id',$bid)
+            ->where('branch_food.restaurant_id',$id)
+          
+            ->get();
+            return response()->json($foods); 
+        }
+        
     }
     public function spFoods(){
         $foods = Food::where('status','1')->get()->toArray();
         return response()->json($foods);
     }
-    public function foodByCategory($id){
-        $foods = Food::where('category_id',$id)->get()->toArray();
-        return response()->json($foods);
+    public function foodByCategory($id,$rid,$bid){
+        if($rid==$bid){
+            $foods = Food::where('category_id',$id)->where('restaurant_id',$rid)->get()->toArray();
+            return response()->json($foods);
+        }else{
+            $foods = DB::table('food')
+            ->join('branch_food','branch_food.food_id','food.id')
+            ->select('food.*')
+            ->where('branch_food.branch_id',$bid)
+            ->where('branch_food.restaurant_id',$rid)
+            ->where('food.category_id',$id)
+            ->get();
+            return response()->json($foods); 
+        }
+       
     }
     public function foodEdit($id){
         $foods = Food::findOrfail($id);

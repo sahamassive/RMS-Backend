@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Branch;
+use App\Models\BranchFood;
 use App\Models\Restuarant;
 use Illuminate\Support\Facades\DB;
 
@@ -91,5 +92,23 @@ class BranchController extends Controller
                 'msg'=>'Error Occurred'
             ]);
         }
+    }
+
+    public function branchFoodAdd(Request $request){
+        $detail=$request->details;
+
+        for ($i = 0; $i < count($detail); $i++) {
+            $data=new BranchFood();
+            $data->restaurant_id=$request->restaurant_id;
+            $data->branch_id=$request->branch_id;
+
+            $data->food_id=$detail[$i][0]['food_id'];
+            $data->save();
+
+        }
+        return response()->json([
+            //error message
+            'msg'=>'Inserted successfully'
+        ]);
     }
 }

@@ -1,4 +1,4 @@
-<?php
+ <?php
 
 namespace App\Http\Controllers;
 
@@ -14,7 +14,7 @@ class CleanerController extends Controller
      */
     public function index()
     {
-        //
+        //      
     }
 
     /**

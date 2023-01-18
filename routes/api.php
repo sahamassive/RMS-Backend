@@ -67,6 +67,7 @@ Route::get('foods',[FoodController::class,'foods']);
 Route::get('quick-foods',[FoodController::class,'quickfoods']);
 Route::get('category-foods/{id}',[FoodController::class,'foodByCategory']);
 Route::get('food-edit/{id}',[FoodController::class,'foodEdit']);
+Route::post('food-edit/{id}',[FoodController::class,'foodUpdate']);
 Route::get('sp-foods',[FoodController::class,'spFoods']);
 
 //Employee
@@ -104,11 +105,7 @@ Route::get('/restaurant/branchs/{restaurant_id}',[RestaurantController::class,'a
 Route::get('restaurant-status/{id}',[RestaurantController::class,'restaurantStatus']);
 Route::get('restaurant-edit/{id}',[RestaurantController::class,'editRestaurant']);
 Route::post('restaurant-edit/{id}',[RestaurantController::class,'updateRestaurant']);
-
 Route::get('restaurant/{id}',[RestaurantController::class,'getRestaurant']);
-
-
-
 
 
 

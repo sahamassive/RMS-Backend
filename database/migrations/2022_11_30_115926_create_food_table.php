@@ -23,14 +23,14 @@ class CreateFoodTable extends Migration
             $table->string('name');
             $table->string('image')->nullable();
             $table->string('video')->nullable();
-            $table->string('description')->nullable();
+            $table->bigText('description')->nullable();
             $table->string('speciality')->nullable();
             $table->string('price');
-            $table->string('discount');
+            $table->string('discount')->default(0);
             $table->string('meta_title');
             $table->string('meta_description');
             $table->string('meta_keywords');
-            $table->tinyInteger('status');
+            $table->tinyInteger('status')->default(0);
             $table->timestamps();
         });
     }

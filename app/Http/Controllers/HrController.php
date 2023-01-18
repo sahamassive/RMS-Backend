@@ -85,7 +85,6 @@ class HrController extends Controller
     public function getEmployee($filter){
       if($filter=='waiter'){
         $data = Waiter::get()->toArray();
-       
       }else if($filter =='chef'){
         $data = Chef::get()->toArray();
       }else if($filter =='manager'){

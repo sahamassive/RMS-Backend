@@ -11,6 +11,7 @@ use App\Models\Brand;
 use Auth;
 use Image;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 
 class FoodController extends Controller
 {
@@ -37,11 +38,85 @@ class FoodController extends Controller
         return response()->json($foods);
     }
     public function foodEdit($id){
-        $foods = Food::findOrfail($id);
-        return response()->json($foods);
-    }
+        $food = DB::table('food')
+                    ->join('sections', 'food.section_id', '=', 'sections.id')
+                    ->join('categories', 'food.category_id', '=', 'categories.id')
+                    ->join('brands', 'food.brand_id', '=', 'brands.id')
+                    ->select('food.*', 'categories.category_name', 'sections.name as section_name', 'brands.name as brand_name')
+                    ->where('food.id', $id)
+                    ->first(); 
+        return response()->json($food);
+    } 
     
-    
+public function foodUpdate(Request $request, $id){
+    $food = Food::findorfail($id);
+
+    $food->section_id=$request->section_id;
+    $food->category_id=$request->category_id;  
+    $food->brand_id=$request->brand_id;
+    $food->recipe_id=1;
+    $food->food_review_id=1;
+    $food->name=$request->name;
+    $food->description=$request->description;
+    $food->speciality=$request->speciality;
+    $food->price=$request->price;
+    $food->meta_title=$request->meta_title;
+    $food->meta_description=$request->meta_description;
+    $food->meta_keywords=$request->meta_keywords;
+
+        //check image
+        $image=$request->file('image');
+        if($image){
+            $extension = $image->getClientOriginalExtension();
+            if(
+                $extension == 'jpeg' || $extension == 'JPEG' ||
+                $extension == 'jpg' || $extension == 'JPG' ||
+                $extension == 'img' || $extension == 'IMG' ||
+                $extension == 'png' || $extension == 'PNG'
+            ){
+                //image path
+                $path1 = public_path('foods/large/' . $food->image);
+                $path2 = public_path('foods/medium/' . $food->image);
+                $path3 = public_path('foods/small/' . $food->image);
+                if (File::exists($path1)) {
+                    //delete prevoius image
+                    @unlink($path1);	
+                    @unlink($path2);	
+                    @unlink($path3);	
+                }
+                //change image name
+                $imageName = time() . "." . $extension;
+                //store image
+                $largeimagePath = public_path('foods/large/'.$imageName);
+                $mediumimagePath = public_path('foods/medium/'.$imageName);
+                $smallimagePath  = public_path('foods/small/'.$imageName);
+
+                //customize image size
+                Image::make($image)->resize(1000,1000)->save($largeimagePath);
+                Image::make($image)->resize(500,500)->save($mediumimagePath);
+                Image::make($image)->resize(250,250)->save($smallimagePath);
+
+                $food->image = $imageName;
+            }
+            else{
+                return response()->json([
+                    //error message
+                    'msg'=>'Your inserted file is not an image.'
+                ]);
+            }
+        }
+        if($food->update()){
+            return response()->json([
+                'msg'=>'Food Updated Successfully'
+                ]);
+        }
+        else{
+            return response()->json([
+                'msg'=>'Error Occured'
+                ]);
+        }
+
+}
 
     public function updateFoodStatus(Request $request){
         if($request->ajax()){

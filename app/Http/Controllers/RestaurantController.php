@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Branch;
 use Illuminate\Http\Request;
 use App\Models\Restuarant;
 use Image;
@@ -18,10 +19,17 @@ class RestaurantController extends Controller
 
     //single Restaurant
     public function getRestaurant($id){
-        $data= Restuarant::where('resturant_id',$id)->first();
+        $data= Restuarant::where('restaurant_id',$id)->first();
         return response()->json($data);
-    }
 
+       
+    return response()->json($data);
+    }
+    public function getBranch($id){
+        $data= Branch::where('restaurant_id',$id)->get();
+        return response()->json($data);
+    return response()->json($data);
+    }
     //new restaurant insert request
     public function restaurantInsert(Request $request){
         //create new restaurant object

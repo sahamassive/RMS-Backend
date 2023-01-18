@@ -64,8 +64,8 @@ Route::post('category-insert',[CategoryController::class,'categoryInsert']);
 //food 
 Route::post('food-insert',[FoodController::class,'foodInsert']);
 Route::get('foods',[FoodController::class,'foods']);
-Route::get('quick-foods',[FoodController::class,'quickfoods']);
-Route::get('category-foods/{id}',[FoodController::class,'foodByCategory']);
+Route::get('quick-foods/{id}/{bid}',[FoodController::class,'quickfoods']);
+Route::get('category-foods/{id}/{rid}/{bid}',[FoodController::class,'foodByCategory']);
 Route::get('food-edit/{id}',[FoodController::class,'foodEdit']);
 Route::post('food-edit/{id}',[FoodController::class,'foodUpdate']);
 Route::get('sp-foods',[FoodController::class,'spFoods']);
@@ -106,6 +106,7 @@ Route::get('restaurant-status/{id}',[RestaurantController::class,'restaurantStat
 Route::get('restaurant-edit/{id}',[RestaurantController::class,'editRestaurant']);
 Route::post('restaurant-edit/{id}',[RestaurantController::class,'updateRestaurant']);
 Route::get('restaurant/{id}',[RestaurantController::class,'getRestaurant']);
+Route::get('branch/{id}',[RestaurantController::class,'getBranch']);
 
 
 
@@ -115,4 +116,5 @@ Route::get('branchs',[BranchController::class,'index']);
 Route::get('branch-status/{id}',[BranchController::class,'branchStatus']);
 Route::get('branch-edit/{id}',[BranchController::class,'editBranch']);
 Route::post('branch-edit/{id}',[BranchController::class,'updateBranch']);
+Route::post('branch-food-add',[BranchController::class,'branchFoodAdd']);
 

@@ -10,6 +10,7 @@ use App\Http\Controllers\Food\FoodController;
 use App\Http\Controllers\HrController;
 use App\Http\Controllers\RestaurantController;
 use App\Http\Controllers\BranchController;
+use App\Http\Controllers\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -107,6 +108,7 @@ Route::get('restaurant-edit/{id}',[RestaurantController::class,'editRestaurant']
 Route::post('restaurant-edit/{id}',[RestaurantController::class,'updateRestaurant']);
 Route::get('restaurant/{id}',[RestaurantController::class,'getRestaurant']);
 Route::get('branch/{id}',[RestaurantController::class,'getBranch']);
+Route::get('restaurant/{id}/{city}',[RestaurantController::class,'getDefBranch']);
 
 
 
@@ -118,3 +120,5 @@ Route::get('branch-edit/{id}',[BranchController::class,'editBranch']);
 Route::post('branch-edit/{id}',[BranchController::class,'updateBranch']);
 Route::post('branch-food-add',[BranchController::class,'branchFoodAdd']);
 
+//order
+Route::post('order-store',[OrderController::class,'orderInsert']);

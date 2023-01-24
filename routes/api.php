@@ -10,8 +10,12 @@ use App\Http\Controllers\Food\FoodController;
 use App\Http\Controllers\HrController;
 use App\Http\Controllers\RestaurantController;
 use App\Http\Controllers\BranchController;
+
+use App\Http\Controllers\OrderController;
+
 use App\Http\Controllers\WasteController;
 use App\Http\Controllers\DiscountController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -109,6 +113,7 @@ Route::get('restaurant-edit/{id}',[RestaurantController::class,'editRestaurant']
 Route::post('restaurant-edit/{id}',[RestaurantController::class,'updateRestaurant']);
 Route::get('restaurant/{id}',[RestaurantController::class,'getRestaurant']);
 Route::get('branch/{id}',[RestaurantController::class,'getBranch']);
+Route::get('restaurant/{id}/{city}',[RestaurantController::class,'getDefBranch']);
 
 //branch
 Route::post('branch-insert',[BranchController::class,'branchInsert']);
@@ -117,6 +122,10 @@ Route::get('branch-status/{id}',[BranchController::class,'branchStatus']);
 Route::get('branch-edit/{id}',[BranchController::class,'editBranch']);
 Route::post('branch-edit/{id}',[BranchController::class,'updateBranch']);
 Route::post('branch-food-add',[BranchController::class,'branchFoodAdd']);
+
+
+//order
+Route::post('order-store',[OrderController::class,'orderInsert']);
 
 //waste
 Route::post('waste-insert',[WasteController::class,'wasteInsert']);
@@ -131,4 +140,5 @@ Route::get('discounts',[DiscountController::class,'index']);
 Route::get('discount-status/{id}',[DiscountController::class,'discountStatus']);
 Route::get('discount-edit/{id}',[DiscountController::class,'editDiscount']);
 Route::post('discount-edit/{id}',[DiscountController::class,'updateDiscount']);
+
 

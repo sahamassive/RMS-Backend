@@ -18,6 +18,7 @@ class CreateFoodTable extends Migration
             $table->integer('section_id');
             $table->integer('category_id');
             $table->integer('recipe_id');
+            $table->string('restaurant_id');
             $table->integer('brand_id')->nullable();
             $table->integer('food_review_id');
             $table->string('name');

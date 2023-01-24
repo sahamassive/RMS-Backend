@@ -15,14 +15,25 @@ class CreateAdminsTable extends Migration
     {
         Schema::create('admins', function (Blueprint $table) {
             $table->id();
+            $table->string('emp_id');
+            $table->string('image')->nullable();
             $table->string('first_name');
-            $table->string('last_name');
-            $table->string('type');
-            $table->string('admin_type_id')->default(0);
+            $table->string('last_name')->nullable();
             $table->string('email')->unique();
             $table->string('phone')->unique();
-            $table->string('nid')->unique();$table->string('image');
-            $table->tinyInteger('status');
+            $table->string('nid')->unique();
+            $table->string('password');
+            $table->date('birth_date')->nullable();
+            $table->date('joining_date');
+            $table->date('resign_date')->nullable();
+            $table->string('address');
+            $table->string('city');
+            $table->string('state');
+            $table->string('country');
+            $table->string('gender');
+            $table->string('zip_code')->nullable();
+            $table->integer('salary');
+            $table->tinyInteger('status')->default(0);
             $table->timestamps();
         });
     }

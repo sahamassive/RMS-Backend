@@ -10,7 +10,7 @@ use App\Models\data;
 use App\Models\Delivery_man;
 use App\Models\Department;
 use App\Models\Waiter;
-
+use Illuminate\Support\Facades\Hash;
 use Image;
 
 class HrController extends Controller
@@ -21,27 +21,27 @@ class HrController extends Controller
             $id=rand ( 10000 , 99999 );
             if($type == 'waiter'){
                 $data=new Waiter();
-                $data->waiter_id='W-'.'01'.date('hi').$id;
+                $data->emp_id='W-'.'01'.date('hi').$id;
             
             
             } else if($type=='chef'){
                 $data=new Chef();
-                $data->chef_id='C-'.'02'.date('hi').$id;
+                $data->emp_id='C-'.'02'.date('hi').$id;
             
               }
               else if($type=='delivery-men'){
                 $data=new Delivery_man();
-                $data->delivery_man_id='D-'.'03'.date('hi').$id;;
+                $data->emp_id='D-'.'03'.date('hi').$id;;
             
               }
               else if($type=='manager'){ 
                 $data=new Manager();
-                $data->manager_id='M-'.'04'.date('hi').$id;;
+                $data->emp_id='M-'.'04'.date('hi').$id;;
             
               }
               else if($type=='cleaner'){
                 $data=new Cleaner();
-                $data->cleaner_id='Cl-'.'05'.date('hi').$id;;
+                $data->emp_id='Cl-'.'05'.date('hi').$id;;
             
               }
         $image=$request->file('image');
@@ -68,15 +68,17 @@ class HrController extends Controller
             $data->birth_date=$request->dob;
             $data->joining_date=$request->joining;
             $data->country=$request->country;
+            $data->password=Hash::make($request->password);
             $data->address=$request->address1;
             $data->city=$request->city;
             $data->state=$request->state;
             $data->zip_code=$request->zipCode;
             $data->salary=$request->salary;
             $data->save();
+            
             return response()->json([
-                'msg'=>'Employee Inserted Successfully'
-               ]);
+                'msg'=> ucwords($type).' Inserted Successfully'
+        ]);
     
 
         
@@ -104,7 +106,7 @@ class HrController extends Controller
       $data->save();
       return response()->json([
         'msg'=>'Department Inserted Successfully'
-       ]);
+    ]);
 
     }
     public function getDepartment(){

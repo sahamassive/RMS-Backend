@@ -2,84 +2,56 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Ingrdeint;
+use App\Models\Item;
 use App\Models\Recipe;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 
 class RecipeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
+   public function ingredientInsert(Request $request){
+    $data=new Ingrdeint();
+    $data->resturant_id=$request->resturant_id;
+    $data->ingredient=$request->ingredient;
+    $data->unit=$request->unit;
+    $data->unit_price=$request->unit_price;
+    $data->save();
+    return response()->json([
+        'msg'=> 'Ingredient Inserted Successfully']);
+
+
+   }
+   public function ingredientList($id){
+    $data=Ingrdeint::where('resturant_id',$id)->get();
+    return response()->json($data);
+   }
+
+   public function recipeInsert(Request $request){
+      $ingredient=$request->ingredient_name;
+      $qty=$request->ingredient_quantity;
+
+      $data=DB::table('items')->select(DB::raw("COUNT(id) as count"))->first();
+      $item_code='10' .$data->count+1;
+      for ($i = 0; $i < count($ingredient); $i++) {
+
+        $data = new Recipe();
+        $data->resturant_id=$request->resturant_id; 
+        $data->item_code=$item_code; 
+        $data->ingredient_name =$ingredient[$i]['value'];
+        $data->ingredient_quantity = $qty[$i]['qty_value'];
+        $data->save();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
+      $item=new Item();
+      $item->item_name=$request->item;
+      $item->item_code=$item_code;
+      $item->save();
+      
+    return response()->json([
+        'msg'=> 'Recipe Inserted Successfully']);
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+   }
+   }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Recipe  $recipe
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Recipe $recipe)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Recipe  $recipe
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Recipe $recipe)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Recipe  $recipe
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Recipe $recipe)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Recipe  $recipe
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Recipe $recipe)
-    {
-        //
-    }
-}

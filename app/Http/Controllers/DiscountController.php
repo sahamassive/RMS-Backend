@@ -54,7 +54,7 @@ class DiscountController extends Controller
             $data->status=0;
             $data->update();
             return response()->json([
-                'msg'=>'Discoused Paused'
+                'msg'=>'Discount Paused'
             ]);
         }
         else{

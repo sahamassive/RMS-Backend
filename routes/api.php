@@ -15,7 +15,11 @@ use App\Http\Controllers\OrderController;
 
 use App\Http\Controllers\WasteController;
 use App\Http\Controllers\DiscountController;
+
 use App\Http\Controllers\RecipeController;
+
+use App\Http\Controllers\CouponController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -126,6 +130,7 @@ Route::post('branch-food-add',[BranchController::class,'branchFoodAdd']);
 
 //order
 Route::post('order-store',[OrderController::class,'orderInsert']);
+Route::get('orders',[OrderController::class,'index']);
 
 //waste
 Route::post('waste-insert',[WasteController::class,'wasteInsert']);
@@ -142,8 +147,15 @@ Route::get('discount-edit/{id}',[DiscountController::class,'editDiscount']);
 Route::post('discount-edit/{id}',[DiscountController::class,'updateDiscount']);
 
 
+
 // Recipe
 Route::post('ingredient-insert',[RecipeController::class,'ingredientInsert']);
 Route::get('ingredient-list/{id}',[RecipeController::class,'ingredientList']);
 Route::post('recipe-insert',[RecipeController::class,'recipeInsert']);
 
+//coupon
+Route::post('coupon-insert',[CouponController::class,'couponInsert']);
+Route::get('coupons',[CouponController::class,'index']);
+Route::get('coupon-status/{id}',[CouponController::class,'couponStatus']);
+Route::get('coupon-edit/{id}',[CouponController::class,'editCoupon']);
+Route::post('coupon-edit/{id}',[CouponController::class,'updateCoupon']);

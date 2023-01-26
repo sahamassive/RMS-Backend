@@ -20,6 +20,7 @@ class CreateRecipesTable extends Migration
             $table->string('ingredient_name');
             $table->string('ingredient_quantity');
         
+
             $table->timestamps();
         });
     }

@@ -19,7 +19,7 @@ class RestaurantController extends Controller
 
     //single Restaurant
 
-    public function getRestaurant($id,){
+    public function getRestaurant($id){
       
             $data= Restuarant::where('restaurant_id',$id)->first();
             return response()->json($data);

@@ -15,6 +15,9 @@ use App\Http\Controllers\OrderController;
 
 use App\Http\Controllers\WasteController;
 use App\Http\Controllers\DiscountController;
+
+use App\Http\Controllers\RecipeController;
+
 use App\Http\Controllers\CouponController;
 
 
@@ -142,6 +145,13 @@ Route::get('discounts',[DiscountController::class,'index']);
 Route::get('discount-status/{id}',[DiscountController::class,'discountStatus']);
 Route::get('discount-edit/{id}',[DiscountController::class,'editDiscount']);
 Route::post('discount-edit/{id}',[DiscountController::class,'updateDiscount']);
+
+
+
+// Recipe
+Route::post('ingredient-insert',[RecipeController::class,'ingredientInsert']);
+Route::get('ingredient-list/{id}',[RecipeController::class,'ingredientList']);
+Route::post('recipe-insert',[RecipeController::class,'recipeInsert']);
 
 //coupon
 Route::post('coupon-insert',[CouponController::class,'couponInsert']);

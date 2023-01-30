@@ -19,7 +19,7 @@ use App\Http\Controllers\DiscountController;
 use App\Http\Controllers\RecipeController;
 
 use App\Http\Controllers\CouponController;
-
+use App\Http\Controllers\LoginController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,6 +35,20 @@ use App\Http\Controllers\CouponController;
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
+
+Route::middleware('auth:sanctum')->group(function () {
+
+//branch
+Route::post('branch-insert',[BranchController::class,'branchInsert']);
+Route::get('branchs',[BranchController::class,'index']);
+Route::get('branch-status/{id}',[BranchController::class,'branchStatus']);
+Route::get('branch-edit/{id}',[BranchController::class,'editBranch']);
+Route::post('branch-edit/{id}',[BranchController::class,'updateBranch']);
+Route::post('branch-food-add',[BranchController::class,'branchFoodAdd']);
+
+
+});
+
 //Brands
 Route::get('brands',[BrandController::class,'brand']);
 Route::post('update-brand-status',[BrandController::class,'updateBrandStatus']);
@@ -85,6 +99,7 @@ Route::post('employee-insert',[HrController::class,'employeeInsert']);
 Route::get('get-employee/{filter}',[HrController::class,'getEmployee']);
 Route::post('department-insert',[HrController::class,'departmentInsert']);
 Route::get('departments',[HrController::class,'getDepartment']);
+Route::post('leave-insert',[HrController::class,'leaveInsert']);
 
 //booking
 Route::post('booking-insert',[BookingController::class,'bookingInsert']);
@@ -119,13 +134,6 @@ Route::get('restaurant/{id}',[RestaurantController::class,'getRestaurant']);
 Route::get('branch/{id}',[RestaurantController::class,'getBranch']);
 Route::get('restaurant/{id}/{city}',[RestaurantController::class,'getDefBranch']);
 
-//branch
-Route::post('branch-insert',[BranchController::class,'branchInsert']);
-Route::get('branchs',[BranchController::class,'index']);
-Route::get('branch-status/{id}',[BranchController::class,'branchStatus']);
-Route::get('branch-edit/{id}',[BranchController::class,'editBranch']);
-Route::post('branch-edit/{id}',[BranchController::class,'updateBranch']);
-Route::post('branch-food-add',[BranchController::class,'branchFoodAdd']);
 
 
 //order
@@ -159,3 +167,7 @@ Route::get('coupons',[CouponController::class,'index']);
 Route::get('coupon-status/{id}',[CouponController::class,'couponStatus']);
 Route::get('coupon-edit/{id}',[CouponController::class,'editCoupon']);
 Route::post('coupon-edit/{id}',[CouponController::class,'updateCoupon']);
+
+
+//login
+Route::post('login-dashboard',[LoginController::class,'loginDashboard']);

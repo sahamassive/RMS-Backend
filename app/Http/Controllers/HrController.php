@@ -9,6 +9,7 @@ use App\Models\Manager;
 use App\Models\data;
 use App\Models\Delivery_man;
 use App\Models\Department;
+use App\Models\Leave;
 use App\Models\Waiter;
 use Illuminate\Support\Facades\Hash;
 use Image;
@@ -112,6 +113,21 @@ class HrController extends Controller
     public function getDepartment(){
       $data = Department::get()->toArray();
       return response()->json($data);
+    }
+
+    public function leaveInsert(Request $request){
+        $data=new Leave();
+        $data->restaurant_id=$request->restaurant_id;
+        $data->emp_id=$request->emp_id;
+        $data->reason=$request->reason;
+        $data->start_time=$request->start_time;
+        $data->end_time=$request->end_time;
+
+        $data->save();
+        return response()->json([
+          'msg'=>'Leave Inserted'
+        ]);
+
     }
 
 }

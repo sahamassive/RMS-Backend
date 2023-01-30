@@ -10,15 +10,13 @@ use App\Http\Controllers\Food\FoodController;
 use App\Http\Controllers\HrController;
 use App\Http\Controllers\RestaurantController;
 use App\Http\Controllers\BranchController;
-
 use App\Http\Controllers\OrderController;
-
 use App\Http\Controllers\WasteController;
 use App\Http\Controllers\DiscountController;
-
 use App\Http\Controllers\RecipeController;
-
 use App\Http\Controllers\CouponController;
+use App\Http\Controllers\Inventory\SupplierController;
+use App\Http\Controllers\Inventory\InvoiceController;
 
 
 /*
@@ -151,6 +149,9 @@ Route::post('discount-edit/{id}',[DiscountController::class,'updateDiscount']);
 // Recipe
 Route::post('ingredient-insert',[RecipeController::class,'ingredientInsert']);
 Route::get('ingredient-list/{id}',[RecipeController::class,'ingredientList']);
+Route::get('ingredient-status/{id}',[RecipeController::class,'ingredientStatus']);
+Route::get('ingredient-edit/{id}',[RecipeController::class,'editIngredient']);
+Route::post('ingredient-edit/{id}',[RecipeController::class,'updateIngredient']);
 Route::post('recipe-insert',[RecipeController::class,'recipeInsert']);
 
 //coupon
@@ -159,3 +160,16 @@ Route::get('coupons',[CouponController::class,'index']);
 Route::get('coupon-status/{id}',[CouponController::class,'couponStatus']);
 Route::get('coupon-edit/{id}',[CouponController::class,'editCoupon']);
 Route::post('coupon-edit/{id}',[CouponController::class,'updateCoupon']);
+
+//supplier
+Route::get('suppliers/{id}',[SupplierController::class,'index']);
+Route::post('supplier-insert',[SupplierController::class,'supplierInsert']);
+Route::get('supplier-status/{id}',[SupplierController::class,'supplierStatus']);
+Route::get('supplier-edit/{id}',[SupplierController::class,'editSupplier']);
+Route::post('supplier-edit/{id}',[SupplierController::class,'updateSupplier']);
+
+//invoices
+Route::post('invoice-insert',[InvoiceController::class,'invoiceInsert']);
+Route::get('invoice-details/{invoice_id}',[InvoiceController::class,'invoiceDetails']);
+Route::get('invoices',[InvoiceController::class,'index']);
+

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateIngrdeintsTable extends Migration
+class CreateInvoiceDetailsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,13 @@ class CreateIngrdeintsTable extends Migration
      */
     public function up()
     {
-        Schema::create('ingredients', function (Blueprint $table) {
+        Schema::create('invoice_details', function (Blueprint $table) {
             $table->id();
-            $table->string('resturant_id');
-            $table->tinyInteger('status')->default(1);
-            $table->string('ingredient');
+            $table->string('invoice_id');
+            $table->string('ingredient_id');
+            $table->string('unit');
+            $table->double('amount');     
+            $table->double('price');
             $table->timestamps();
         });
     }
@@ -29,6 +31,6 @@ class CreateIngrdeintsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ingrdeints');
+        Schema::dropIfExists('invoice_details');
     }
 }

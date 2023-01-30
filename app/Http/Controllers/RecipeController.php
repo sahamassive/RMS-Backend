@@ -15,14 +15,13 @@ class RecipeController extends Controller
     $data=new Ingrdeint();
     $data->resturant_id=$request->resturant_id;
     $data->ingredient=$request->ingredient;
-    $data->unit=$request->unit;
-    $data->unit_price=$request->unit_price;
     $data->save();
     return response()->json([
         'msg'=> 'Ingredient Inserted Successfully']);
 
 
    }
+
    public function ingredientList($id){
     $data=Ingrdeint::where('resturant_id',$id)->get();
     return response()->json($data);
@@ -53,5 +52,56 @@ class RecipeController extends Controller
         'msg'=> 'Recipe Inserted Successfully']);
 
    }
-   }
+
+       //ingredient status update
+       public function ingredientStatus($id){
+        //fetch from database
+        $data = Ingrdeint::where('id',$id)->first();
+        //if active status
+        if($data->status==1){
+            $data->status=0;
+            $data->update();
+            return response()->json([
+              //success response
+                'msg'=>'Ingredient Status Updated'
+            ]);
+        }
+        else{
+            $data->status=1;
+            $data->update();
+            return response()->json([
+              //error message
+                'msg'=>'Ingredient Status Update'
+            ]); 
+        }
+    }
+
+    //edit Ingredient
+    public function editIngredient($id){
+      //fetch data from database
+      $data = Ingrdeint::where('id', $id)->first();
+      return response()->json($data);
+    }
+
+    //updatre ingredient information
+    public function updateIngredient(Request $request, $id){
+      //fetch data from database
+      $data = Ingrdeint::where('id', $id)->first();
+
+      $data->ingredient = $request->ingredient;
+
+      if($data->update()){
+        return response()->json([
+            //success message
+            'msg'=>'Updated Successfully'
+        ]);
+    }
+    else{
+        return response()->json([
+            //error message
+            'msg'=>'Error Occurred'
+        ]);
+    }
+    }
+}
 

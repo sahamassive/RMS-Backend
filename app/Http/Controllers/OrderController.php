@@ -31,7 +31,7 @@ class OrderController extends Controller
         $orderId='01'.date('hi').$id;
         $order=new Order();
         $order->order_id=$orderId; 
-        $order->restaurant_id=$request->resturant_id;
+        $order->restaurant_id=$request->restaurant_id;
         $order->branch_id=$request->branch_id;
         $order->customer_id=10;
         $order->item=$request->item;

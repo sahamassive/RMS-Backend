@@ -13,7 +13,7 @@ class RecipeController extends Controller
 {
    public function ingredientInsert(Request $request){
     $data=new Ingrdeint();
-    $data->resturant_id=$request->resturant_id;
+    $data->restaurant_id=$request->restaurant_id;
     $data->ingredient=$request->ingredient;
     $data->save();
     return response()->json([
@@ -23,7 +23,7 @@ class RecipeController extends Controller
    }
 
    public function ingredientList($id){
-    $data=Ingrdeint::where('resturant_id',$id)->get();
+    $data=Ingrdeint::where('restaurant_id',$id)->get();
     return response()->json($data);
    }
 
@@ -36,7 +36,7 @@ class RecipeController extends Controller
       for ($i = 0; $i < count($ingredient); $i++) {
 
         $data = new Recipe();
-        $data->resturant_id=$request->resturant_id; 
+        $data->restaurant_id=$request->restaurant_id; 
         $data->item_code=$item_code; 
         $data->ingredient_name =$ingredient[$i]['value'];
         $data->ingredient_quantity = $qty[$i]['qty_value'];

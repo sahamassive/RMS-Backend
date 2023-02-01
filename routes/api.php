@@ -166,6 +166,8 @@ Route::get('ingredient-edit/{id}',[RecipeController::class,'editIngredient']);
 Route::post('ingredient-edit/{id}',[RecipeController::class,'updateIngredient']);
 Route::post('recipe-insert',[RecipeController::class,'recipeInsert']);
 
+Route::get('items/{id}',[RecipeController::class,'itemList']);
+
 //coupon
 Route::post('coupon-insert',[CouponController::class,'couponInsert']);
 Route::get('coupons',[CouponController::class,'index']);

@@ -19,6 +19,7 @@ class CreateInvoiceDetailsTable extends Migration
             $table->string('ingredient_id');
             $table->string('unit');
             $table->double('amount');     
+            $table->double('unit_price');     
             $table->double('price');
             $table->timestamps();
         });

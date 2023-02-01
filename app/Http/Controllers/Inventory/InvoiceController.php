@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Inventory\Invoice;
 use App\Models\Inventory\InvoiceDetail;
+use App\Models\Inventory\Inventory;
 use Illuminate\Support\Facades\DB;
 
 class InvoiceController extends Controller
@@ -23,6 +24,7 @@ class InvoiceController extends Controller
 
     //insert a new invoice
     public function invoiceInsert(Request $request){
+        $ingredient_id = $request->ingredient_id;
         $data = new Invoice();
         $data->restaurant_id = $request->restaurant_id;
         $data->branch_id = '1';
@@ -34,26 +36,57 @@ class InvoiceController extends Controller
         //check data has successfully saved or failed
         if($data->save()){
             for($i = 0; $i < count($request->amount); $i++){
-                $details = new InvoiceDetail();
-                $details->invoice_id = $request->invoice_id;
-                $details->ingredient_id = $request->ingredient_id[$i]['value'];
-                $details->amount = $request->amount[$i]['value'];
-                $details->unit = $request->unit[$i]['value'];
-                $details->price = $request->price[$i]['value'];
-                //check data has successfully saved or failed
-                if($details->save()){
-                    return response()->json([
-                        //success message
-                        'msg'=>'Invoice Inserted Successfully'
-                    ]);
+                if($request->unit[$i]['value'] == 'Kg'){
+                    $unit = $request->amount[$i]['value']*1000;
+                    $unit_unit = 'Gm';
+                }
+                else if($request->unit[$i]['value'] == 'L'){
+                    $unit = $request->amount[$i]['value']*900;
+                    $unit_unit = 'Gm';
                 }
                 else{
-                    return response()->json([
-                        //error message
-                        'msg'=>'Error Occurred'
-                    ]);
+                    $unit = $request->amount[$i]['value'];
+                    $unit_unit = $request->unit[$i]['value'];
                 }
+                $details = new InvoiceDetail();
+                $details->invoice_id = $request->invoice_id;
+                $details->ingredient_id = $ingredient_id[$i]['value'];
+
+                $inventory = Inventory::where('ingredient_id', $ingredient_id[$i]['value'])->first();
+                if($inventory){
+                    $inventory->previous_quantity = $inventory->current_quantity;
+                    $inventory->previous_unit_price = $inventory->current_unit_price;
+                    $inventory->current_quantity = $inventory->current_quantity + $unit;
+                    $inventory->current_unit_price =  $request->price[$i]['value'] / $unit;
+                    $details->amount = $unit;
+                    $details->unit = $unit_unit;
+                    $details->unit_price = $request->price[$i]['value'] / $unit;
+                    $inventory->update();
+                }
+                else{
+                    $inventory = new Inventory();
+                    $inventory->restaurant_id = $request->restaurant_id;
+                    $inventory->ingredient_id = $ingredient_id[$i]['value'];
+                    $inventory->previous_quantity = $inventory->current_quantity;
+                    $inventory->previous_unit_price = $inventory->current_unit_price;
+                    $inventory->previous_quantity = $inventory->current_quantity;
+                    $inventory->previous_unit_price = $inventory->current_unit_price;
+                    $inventory->current_quantity = $inventory->current_quantity + $unit;
+                    $inventory->current_unit_price =  $request->price[$i]['value'] / $unit;
+                    $details->amount = $unit;
+                    $details->unit = $unit_unit;
+                    $details->unit_price = $request->price[$i]['value'] / $unit;
+                    $inventory->save();
+                }
+                $details->price = $request->price[$i]['value'];
+                //check data has successfully saved or failed
+                $details->save();
+
             }
+            return response()->json([
+                //error message
+                'msg'=>'Successfully Inserted'
+            ]);
         }
         else{
             return response()->json([

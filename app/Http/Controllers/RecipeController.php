@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Ingrdeint;
+use App\Models\Ingredient;
 use App\Models\Item;
 use App\Models\Recipe;
 use Illuminate\Http\Request;
@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 class RecipeController extends Controller
 {
    public function ingredientInsert(Request $request){
-    $data=new Ingrdeint();
+    $data=new Ingredient();
     $data->restaurant_id=$request->restaurant_id;
     $data->ingredient=$request->ingredient;
     $data->save();
@@ -23,7 +23,7 @@ class RecipeController extends Controller
    }
 
    public function ingredientList($id){
-    $data=Ingrdeint::where('restaurant_id',$id)->get();
+    $data=Ingredient::where('restaurant_id',$id)->get();
     return response()->json($data);
    }
 
@@ -44,6 +44,7 @@ class RecipeController extends Controller
     }
 
       $item=new Item();
+      $item->restaurant_id=$request->restaurant_id; 
       $item->item_name=$request->item;
       $item->item_code=$item_code;
       $item->save();
@@ -52,11 +53,15 @@ class RecipeController extends Controller
         'msg'=> 'Recipe Inserted Successfully']);
 
    }
+   public function itemList($id){
+    $data=Item::where('restaurant_id',$id)->get();
+    return response()->json($data);
+   }
 
        //ingredient status update
        public function ingredientStatus($id){
         //fetch from database
-        $data = Ingrdeint::where('id',$id)->first();
+        $data = Ingredient::where('id',$id)->first();
         //if active status
         if($data->status==1){
             $data->status=0;
@@ -79,14 +84,14 @@ class RecipeController extends Controller
     //edit Ingredient
     public function editIngredient($id){
       //fetch data from database
-      $data = Ingrdeint::where('id', $id)->first();
+      $data = Ingredient::where('id', $id)->first();
       return response()->json($data);
     }
 
     //updatre ingredient information
     public function updateIngredient(Request $request, $id){
       //fetch data from database
-      $data = Ingrdeint::where('id', $id)->first();
+      $data = Ingredient::where('id', $id)->first();
 
       $data->ingredient = $request->ingredient;
 

@@ -333,7 +333,8 @@ public function foodUpdate(Request $request, $id){
 
     public function foodInsert(Request $request){
         $food=new Food();
-        
+        $food->restaurant_id=$request->restaurant_id;
+        $food->item_code=$request->item_code;
         $food->section_id=$request->section_id;
         $food->category_id=$request->category_id;  
         $food->brand_id=$request->brand_id;
@@ -343,6 +344,7 @@ public function foodUpdate(Request $request, $id){
         $food->description=$request->description;
         $food->speciality=$request->speciality;
         $food->price=$request->price;
+        $food->basic_price=$request->basic_price;
         $food->meta_title=$request->meta_title;
         $food->meta_description=$request->meta_description;
         $food->meta_keywords=$request->meta_keywords;

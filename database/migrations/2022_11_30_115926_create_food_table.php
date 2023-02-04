@@ -21,11 +21,13 @@ class CreateFoodTable extends Migration
             $table->string('restaurant_id');
             $table->integer('brand_id')->nullable();
             $table->integer('food_review_id');
+            $table->integer('item_code');
             $table->string('name');
             $table->string('image')->nullable();
             $table->string('video')->nullable();
             $table->bigText('description')->nullable();
             $table->string('speciality')->nullable();
+            $table->double('basic_price');
             $table->string('price');
             $table->string('discount')->default(0);
             $table->string('meta_title');

@@ -17,7 +17,7 @@ class CreateRecipesTable extends Migration
             $table->id();
             $table->string('restaurant_id');
             $table->integer('item_code');
-            $table->string('ingredient_name');
+            $table->string('ingredient_id');
             $table->string('ingredient_quantity');
         
 

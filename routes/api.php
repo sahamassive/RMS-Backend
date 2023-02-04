@@ -15,11 +15,11 @@ use App\Http\Controllers\WasteController;
 use App\Http\Controllers\DiscountController;
 use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\CouponController;
-
 use App\Http\Controllers\LoginController;
-
 use App\Http\Controllers\Inventory\SupplierController;
 use App\Http\Controllers\Inventory\InvoiceController;
+use App\Http\Controllers\Inventory\InventoryController;
+use App\Http\Controllers\ChefController;
 
 
 
@@ -189,5 +189,13 @@ Route::post('supplier-edit/{id}',[SupplierController::class,'updateSupplier']);
 Route::post('invoice-insert',[InvoiceController::class,'invoiceInsert']);
 Route::get('invoice-details/{invoice_id}',[InvoiceController::class,'invoiceDetails']);
 Route::get('invoices',[InvoiceController::class,'index']);
+
+//inventory
+Route::get('inventories',[InventoryController::class,'index']);
+
+//chef
+Route::get('chefs/{id}',[ChefController::class,'index']);
+Route::get('chef-inventory/{id}',[ChefController::class,'ChefInventory']);
+Route::get('insert-chef-inventory/{id}',[ChefController::class,'ChefInventory']);
 
 

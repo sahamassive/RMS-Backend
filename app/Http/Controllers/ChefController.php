@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Chef;
+use App\Models\Chef_inventory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ChefController extends Controller
 {
@@ -12,9 +14,11 @@ class ChefController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($id)
     {
-        //
+        //all chef list
+        $data = Chef::where('restaurant_id',$id)->get();
+        return response()->json($data);
     }
 
     /**
@@ -82,4 +86,14 @@ class ChefController extends Controller
     {
         //
     }
+
+        //take inventory items from inventory list
+        public function ChefInventory($id){
+            $data = DB::table('chef_inventories')
+                    ->where('emp_id',$id)
+                    ->where('created_at', date("Y-m-d"))
+                    ->orderByDesc('created_at')
+                    ->get();
+            return response()->json($data);
+        }
 }

@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Hash;
 class LoginController extends Controller
 {
     public function loginDashboard(Request $request){
-       
+
         $request->validate([
             
             'device_name' => 'required',
@@ -19,17 +19,16 @@ class LoginController extends Controller
 
         $type=$request->type;
 
-
-        $user="App\Models\\$type"::where('email', $request->email)->first();
+        $query = "App\Models\\$type";
+        $user = $query::where('email', $request->email)->first();
         if($user){
             if (Hash::check($request->password,$user->password)) {
                 $token=  $user->createToken($request->device_name)->plainTextToken;
                 $response =[
                     'message'=>'Login',
-                   'token'=>$token,
-                   'type'=>$type
+                    'token'=>$token,
+                    'type'=>$type
                 ];
-              
                 return response($response,201);
             }else{
                 return response()->json([
@@ -41,13 +40,5 @@ class LoginController extends Controller
                 'message'=>'Failed'
             ]);   
         }
-       
-    
-
-
-        
-     
-     
-       
     }
 }

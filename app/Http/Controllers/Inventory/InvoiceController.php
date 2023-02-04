@@ -32,9 +32,10 @@ class InvoiceController extends Controller
         $data->total_price = $request->total_price;
         $data->date = $request->date;
         $data->invoice_id = $request->invoice_id;
+        $check = $data->save();
         
         //check data has successfully saved or failed
-        if($data->save()){
+        if($check){
             for($i = 0; $i < count($request->amount); $i++){
                 if($request->unit[$i]['value'] == 'Kg'){
                     $unit = $request->amount[$i]['value']*1000;
@@ -58,6 +59,7 @@ class InvoiceController extends Controller
                     $inventory->previous_unit_price = $inventory->current_unit_price;
                     $inventory->current_quantity = $inventory->current_quantity + $unit;
                     $inventory->current_unit_price =  $request->price[$i]['value'] / $unit;
+                    $inventory->unit = $unit_unit;
                     $details->amount = $unit;
                     $details->unit = $unit_unit;
                     $details->unit_price = $request->price[$i]['value'] / $unit;
@@ -67,6 +69,7 @@ class InvoiceController extends Controller
                     $inventory = new Inventory();
                     $inventory->restaurant_id = $request->restaurant_id;
                     $inventory->ingredient_id = $ingredient_id[$i]['value'];
+                    $inventory->unit = $unit_unit;
                     $inventory->previous_quantity = $inventory->current_quantity;
                     $inventory->previous_unit_price = $inventory->current_unit_price;
                     $inventory->previous_quantity = $inventory->current_quantity;
@@ -81,7 +84,6 @@ class InvoiceController extends Controller
                 $details->price = $request->price[$i]['value'];
                 //check data has successfully saved or failed
                 $details->save();
-
             }
             return response()->json([
                 //error message
@@ -99,8 +101,8 @@ class InvoiceController extends Controller
     //invoice details
     public function invoiceDetails($invoice_id){
         $data = DB::table('invoice_details')
-                    ->join('ingrdeints', 'invoice_details.ingredient_id', '=', 'ingrdeints.id')
-                    ->select('invoice_details.*', 'ingrdeints.ingredient')
+                    ->join('ingredients', 'invoice_details.ingredient_id', '=', 'ingredients.id')
+                    ->select('invoice_details.*', 'ingredients.ingredient')
                     ->where('invoice_details.invoice_id', $invoice_id)
                     ->get();
         $data2 = DB::table('invoices')

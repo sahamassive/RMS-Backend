@@ -18,6 +18,7 @@ class CreateInventoriesTable extends Migration
             $table->string('restaurant_id');
             $table->integer('branch_id')->nullable();
             $table->string('ingredient_id');
+            $table->string('unit');
             $table->double('previous_quantity')->nullable();
             $table->double('previous_unit_price')->nullable();
             $table->double('current_quantity')->nullable();

@@ -96,6 +96,7 @@ Route::get('food-edit/{id}',[FoodController::class,'foodEdit']);
 Route::post('food-edit/{id}',[FoodController::class,'foodUpdate']);
 Route::get('sp-foods',[FoodController::class,'spFoods']);
 
+
 //Employee
 Route::post('employee-insert',[HrController::class,'employeeInsert']);
 Route::get('get-employee/{filter}',[HrController::class,'getEmployee']);
@@ -167,6 +168,12 @@ Route::post('ingredient-edit/{id}',[RecipeController::class,'updateIngredient'])
 Route::post('recipe-insert',[RecipeController::class,'recipeInsert']);
 
 Route::get('items/{id}',[RecipeController::class,'itemList']);
+Route::get('basic-price/{id}',[RecipeController::class,'basicPrice']);
+Route::post('updatePrice/{id}',[RecipeController::class,'priceUpdate']);
+//item
+Route::get('get-items/{id}',[RecipeController::class,'getItem']);
+Route::get('item-edit/{id}',[RecipeController::class,'editItem']);
+Route::post('item-update/{id}',[RecipeController::class,'updateItem']);
 
 //coupon
 Route::post('coupon-insert',[CouponController::class,'couponInsert']);

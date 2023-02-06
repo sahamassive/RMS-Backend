@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateChefInventoriesTable extends Migration
+class CreateTransferInventoryDetailsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,14 @@ class CreateChefInventoriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('chef_inventories', function (Blueprint $table) {
+        Schema::create('transfer_inventory_details', function (Blueprint $table) {
             $table->id();
-            $table->string('emp_id');
+            $table->string('transfer_id');
             $table->string('ingredient_id');
             $table->string('quantity');
             $table->string('unit');
-            $table->date('date');
-            $table->string('return_quantity')->nullable();
-            $table->string('return_unit')->nullable();
+            $table->string('receive_quantity')->nullable();
+            $table->string('receive_unit')->nullable();
             $table->timestamps();
         });
     }
@@ -33,6 +32,6 @@ class CreateChefInventoriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('chef_inventories');
+        Schema::dropIfExists('transfer_inventory_details');
     }
 }

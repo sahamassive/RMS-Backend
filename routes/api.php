@@ -199,6 +199,8 @@ Route::get('invoices',[InvoiceController::class,'index']);
 
 //inventory
 Route::get('inventories',[InventoryController::class,'index']);
+Route::post('inventory-distribution',[InventoryController::class,'inventoryDistribution']);
+Route::post('inventory-transfer',[InventoryController::class,'inventoryTransfer']);
 
 //chef
 Route::get('chefs/{id}',[ChefController::class,'index']);

@@ -42,7 +42,6 @@ class OrderController extends Controller
         $order->save();
 
         for ($i = 0; $i < count($detail); $i++) {
-
             $orderDetail = new OrderDetail();
             $orderDetail->order_id=$orderId; 
             $orderDetail->food_id =$detail[$i][0]['food_id'];

@@ -96,6 +96,7 @@ Route::get('food-edit/{id}',[FoodController::class,'foodEdit']);
 Route::post('food-edit/{id}',[FoodController::class,'foodUpdate']);
 Route::get('sp-foods',[FoodController::class,'spFoods']);
 
+Route::get('quick-foods-branch/{id}/{bid}',[FoodController::class,'quickfoodsBranch']);
 
 //Employee
 Route::post('employee-insert',[HrController::class,'employeeInsert']);

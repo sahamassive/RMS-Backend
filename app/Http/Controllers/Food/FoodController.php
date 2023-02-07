@@ -41,6 +41,19 @@ class FoodController extends Controller
         }
         
     }
+
+    public function quickfoodsBranch($id,$bid){
+      
+        $data = Food::where('restaurant_id',$id)->whereNotExists(function ($query) {
+            $query->select(DB::raw(1))
+                  ->from('branch_food')
+               
+                  ->whereRaw('branch_food.food_id = food.id');
+                
+        })->get();
+  // $data=Item::where('restaurant_id',$id)->get();
+  return response()->json($data);
+    }
     public function spFoods(){
         $foods = Food::where('status','1')->get()->toArray();
         return response()->json($foods);

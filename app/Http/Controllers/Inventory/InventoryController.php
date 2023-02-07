@@ -41,6 +41,8 @@ class InventoryController extends Controller
                     'msg'=>'Please Select Chef First'
                 ]);
             }
+            $ask = $request->inventoryQueue[$i][0]['askQuantity'];
+
             $data->emp_id = $request->chefId;
             $data->ingredient_id = $request->inventoryQueue[$i][0]['ingredient_id'];
             $data->quantity = $request->inventoryQueue[$i][0]['askQuantity'];
@@ -51,7 +53,13 @@ class InventoryController extends Controller
             $newInventory = Inventory::where('ingredient_id', $request->inventoryQueue[$i][0]['ingredient_id'])->first();
             $newInventory->current_quantity = $newInventory->current_quantity - $request->inventoryQueue[$i][0]['askQuantity'];
             if($newInventory->previous_quantity > 0){
-                $newInventory->previous_quantity = $newInventory->previous_quantity - $request->inventoryQueue[$i][0]['askQuantity'];
+                if($newInventory->previous_quantity > $request->inventoryQueue[$i][0]['askQuantity']){
+                    $newInventory->previous_quantity = $newInventory->previous_quantity - $request->inventoryQueue[$i][0]['askQuantity'];
+                    
+                }
+                else{
+                    $newInventory->previous_quantity = 0;
+                }
             }
             $newInventory->update();
         }
@@ -62,6 +70,7 @@ class InventoryController extends Controller
     }
 
     public function inventoryTransfer(Request $request){
+        $id = uniqid();
         $data = new TransferInventory;
         if($request->branchId == null){
             return response()->json([
@@ -70,7 +79,7 @@ class InventoryController extends Controller
             ]);
         }
         $data->restaurant_id = $request->restaurant_id;
-        $data->transfer_id = uniqid();
+        $data->transfer_id = $id;
         $data->sending_date = date("Y-m-d");
         $data->from = 1;
         $data->to = $request->branchId;
@@ -87,12 +96,22 @@ class InventoryController extends Controller
             }
 
             $details = new TransferInventoryDetails();
-            $details->
+            $details->transfer_id = $id;
+            $details->ingredient_id = $request->inventoryQueue[$i][0]['ingredient_id'];
+            $details->quantity = $request->inventoryQueue[$i][0]['askQuantity'];
+            $details->unit = $unit_unit;
+            $details->save();
 
             $newInventory = Inventory::where('ingredient_id', $request->inventoryQueue[$i][0]['ingredient_id'])->first();
             $newInventory->current_quantity = $newInventory->current_quantity - $request->inventoryQueue[$i][0]['askQuantity'];
             if($newInventory->previous_quantity > 0){
-                $newInventory->previous_quantity = $newInventory->previous_quantity - $request->inventoryQueue[$i][0]['askQuantity'];
+                if($newInventory->previous_quantity > $request->inventoryQueue[$i][0]['askQuantity']){
+                    $newInventory->previous_quantity = $newInventory->previous_quantity - $request->inventoryQueue[$i][0]['askQuantity'];
+                    
+                }
+                else{
+                    $newInventory->previous_quantity = 0;
+                }
             }
             $newInventory->update();
         }

@@ -30,7 +30,12 @@ class OrderController extends Controller
     public function orderInsert(Request $request){
         $detail=$request->details;
         $id=rand ( 10000 , 99999 );
-        $orderId='01'.date('hi').$id;
+        if($request->pickup_method=='pos'){
+            $orderId='Pos-'.date('hi').$id;
+        }else{
+            $orderId='Cus-'.date('hi').$id;
+        }
+        
         $order=new Order();
         $order->order_id=$orderId; 
         $order->restaurant_id=$request->restaurant_id;

@@ -17,7 +17,8 @@ class CreateChefInventoriesTable extends Migration
             $table->id();
             $table->string('emp_id');
             $table->string('ingredient_id');
-            $table->string('quantity');
+            $table->float('quantity');
+            $table->float('used_quantity');
             $table->string('unit');
             $table->date('date');
             $table->string('return_quantity')->nullable();

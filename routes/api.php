@@ -143,6 +143,7 @@ Route::get('restaurant/{id}/{city}',[RestaurantController::class,'getDefBranch']
 //order
 Route::post('order-store',[OrderController::class,'orderInsert']);
 Route::get('orders',[OrderController::class,'index']);
+Route::get('order/recent-order',[OrderController::class,'recentOrder']);
 
 //waste
 Route::post('waste-insert',[WasteController::class,'wasteInsert']);
@@ -205,7 +206,7 @@ Route::post('inventory-transfer',[InventoryController::class,'inventoryTransfer'
 
 //chef
 Route::get('chefs/{id}',[ChefController::class,'index']);
-Route::get('chef-inventory/{id}',[ChefController::class,'ChefInventory']);
-Route::get('insert-chef-inventory/{id}',[ChefController::class,'ChefInventory']);
+Route::get('chef-inventory/{emp_id}',[ChefController::class,'ChefInventory']);
+Route::get('chef-order/{emp_id}/{order_id}/{food_id}/{quantity}',[ChefController::class,'ChefOrder']);
 
 

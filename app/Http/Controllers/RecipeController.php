@@ -122,16 +122,16 @@ class RecipeController extends Controller
     }
 
     public function basicPrice($id){
-         $data=DB::table('recipes')
-                   ->join('inventories','inventories.ingredient_id','recipes.ingredient_id')
-                   ->join('items','items.item_code','recipes.item_code')  
-                   ->selectRaw("SUM(inventories.current_unit_price * recipes.ingredient_quantity) as basic_price
-                   ,items.item_name,items.item_code")
-                   ->groupBy('recipes.item_code') 
-                   ->where('recipes.restaurant_id',$id)
-                   ->get(); 
+        $data=DB::table('recipes')
+                  ->join('inventories','inventories.ingredient_id','recipes.ingredient_id')
+                  ->join('items','items.item_code','recipes.item_code')  
+                  ->selectRaw("SUM(inventories.current_unit_price * recipes.ingredient_quantity) as basic_price
+                  ,items.item_name,items.item_code")
+                  ->groupBy('recipes.item_code') 
+                  ->where('recipes.restaurant_id',$id)
+                  ->get(); 
 
-     return response()->json($data);
+      return response()->json($data);
 
     }
 

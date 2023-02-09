@@ -24,7 +24,7 @@ class CreateOrdersTable extends Migration
             $table->integer('vat');
             $table->integer('grand_price');
             $table->string('pickup_method');
-            $table->string('order_status')->default("pending");
+            $table->string('order_status');
             $table->timestamps();
         });
     }

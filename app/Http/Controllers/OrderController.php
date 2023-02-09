@@ -12,7 +12,9 @@ class OrderController extends Controller
     //all order list
     public function index(){
         //fetch data from database
-        $id = Order::select('order_id')->get();
+        $id = Order::select('order_id')
+                    ->orderByDesc('id')
+                    ->get();
         $data = DB::table('orders')
                     ->join('order_details', 'orders.order_id', '=', 'order_details.order_id')
                     ->join('food', 'order_details.food_id', '=', 'food.id')
@@ -22,8 +24,8 @@ class OrderController extends Controller
             'data' => $data,
             'id' => $id
         ]);
-        return response()->json($data);
     }
+
     //insert new order
     public function orderInsert(Request $request){
         $detail=$request->details;
@@ -34,6 +36,7 @@ class OrderController extends Controller
         $order->restaurant_id=$request->restaurant_id;
         $order->branch_id=$request->branch_id;
         $order->customer_id=10;
+        $order->order_status = "pending";
         $order->item=$request->item;
         $order->total_price=$request->total;
         $order->vat=$request->vat;
@@ -50,6 +53,25 @@ class OrderController extends Controller
         }
         return response()->json([
             'msg'=>'Order Submitted'
+        ]);
+    }
+
+    //get recent orders
+    public function recentOrder(){
+        //fetch data from database
+        $id = Order::select('order_id')
+                    ->whereDate('created_at', date("Y-m-d"))
+                    ->get();
+        $data = DB::table('orders')
+                    ->join('order_details','order_details.order_id', '=', 'orders.order_id')
+                    ->join('food','order_details.food_id', '=', 'food.id')
+                    ->where('orders.order_status', "pending")
+                    ->whereDate('orders.created_at', date("Y-m-d"))
+                    ->select('orders.*', 'order_details.*', 'food.name', 'food.image', 'food.item_code')
+                    ->get();
+        return response()->json([
+            'data' => $data,
+            'id' => $id
         ]);
     }
 }

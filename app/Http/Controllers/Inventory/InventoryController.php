@@ -34,34 +34,44 @@ class InventoryController extends Controller
             else{
                 $unit_unit = $request->inventoryQueue[$i][0]['unit'];
             }
-            $data = new Chef_inventory();
-            if($request->chefId == null){
-                return response()->json([
-                    //error message
-                    'msg'=>'Please Select Chef First'
-                ]);
-            }
-            $ask = $request->inventoryQueue[$i][0]['askQuantity'];
 
-            $data->emp_id = $request->chefId;
-            $data->ingredient_id = $request->inventoryQueue[$i][0]['ingredient_id'];
-            $data->quantity = $request->inventoryQueue[$i][0]['askQuantity'];
-            $data->unit = $unit_unit;
-            $data->date = date("Y-m-d");
-            $data->save();
-
-            $newInventory = Inventory::where('ingredient_id', $request->inventoryQueue[$i][0]['ingredient_id'])->first();
-            $newInventory->current_quantity = $newInventory->current_quantity - $request->inventoryQueue[$i][0]['askQuantity'];
-            if($newInventory->previous_quantity > 0){
-                if($newInventory->previous_quantity > $request->inventoryQueue[$i][0]['askQuantity']){
-                    $newInventory->previous_quantity = $newInventory->previous_quantity - $request->inventoryQueue[$i][0]['askQuantity'];
-                    
-                }
-                else{
-                    $newInventory->previous_quantity = 0;
-                }
+            $previousData = Chef_inventory::where('ingredient_id', '=', $request->inventoryQueue[$i][0]['ingredient_id'])
+                                            ->whereDate('created_at', date("Y-m-d"))
+                                            ->where('emp_id', $request->chefId)
+                                            ->first();
+            if($previousData){
+                $previousData->quantity = $previousData->quantity + $request->inventoryQueue[$i][0]['askQuantity'];
+                $previousData->update();
             }
-            $newInventory->update();
+            else{
+                $data = new Chef_inventory();
+                if($request->chefId == null){
+                    return response()->json([
+                        //error message
+                        'msg'=>'Please Select Chef First'
+                    ]);
+                }
+    
+                $data->emp_id = $request->chefId;
+                $data->ingredient_id = $request->inventoryQueue[$i][0]['ingredient_id'];
+                $data->quantity = $request->inventoryQueue[$i][0]['askQuantity'];
+                $data->unit = $unit_unit;
+                $data->date = date("Y-m-d");
+                $data->save();
+    
+                $newInventory = Inventory::where('ingredient_id', $request->inventoryQueue[$i][0]['ingredient_id'])->first();
+                $newInventory->current_quantity = $newInventory->current_quantity - $request->inventoryQueue[$i][0]['askQuantity'];
+                if($newInventory->previous_quantity > 0){
+                    if($newInventory->previous_quantity > $request->inventoryQueue[$i][0]['askQuantity']){
+                        $newInventory->previous_quantity = $newInventory->previous_quantity - $request->inventoryQueue[$i][0]['askQuantity'];
+                        
+                    }
+                    else{
+                        $newInventory->previous_quantity = 0;
+                    }
+                }
+                $newInventory->update();
+            }
         }
         return response()->json([
             //success message

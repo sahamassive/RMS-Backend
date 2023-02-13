@@ -29,11 +29,15 @@ class OrderController extends Controller
     //insert new order
     public function orderInsert(Request $request){
         $detail=$request->details;
+        $extension = '0';
+        for($i = 0; $i < $request->item - 1; $i++){
+            $extension .= "0";
+        }
         $id=rand ( 10000 , 99999 );
         if($request->pickup_method=='pos'){
-            $orderId='Pos-'.date('hi').$id;
+            $orderId='Pos-'.date('hi').$id.'-'.$extension;
         }else{
-            $orderId='Cus-'.date('hi').$id;
+            $orderId='Cus-'.date('hi').$id.'-'.$extension;
         }
         
         $order=new Order();
@@ -53,11 +57,13 @@ class OrderController extends Controller
             $orderDetail = new OrderDetail();
             $orderDetail->order_id=$orderId; 
             $orderDetail->food_id =$detail[$i][0]['food_id'];
+            $orderDetail->item_code =$detail[$i][0]['item_code'];
             $orderDetail->quantity = $detail[$i][0]['qty'];
+            $orderDetail->status = 'pending';
             $orderDetail->save();
         }
         return response()->json([
-            'msg'=>'Order Submitted'
+            'msg'=> 'Order Submitted',
         ]);
     }
 
@@ -70,7 +76,7 @@ class OrderController extends Controller
         $data = DB::table('orders')
                     ->join('order_details','order_details.order_id', '=', 'orders.order_id')
                     ->join('food','order_details.food_id', '=', 'food.id')
-                    ->where('orders.order_status', "pending")
+                    ->where('order_details.status', "pending")
                     ->whereDate('orders.created_at', date("Y-m-d"))
                     ->select('orders.*', 'order_details.*', 'food.name', 'food.image', 'food.item_code')
                     ->get();

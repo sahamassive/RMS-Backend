@@ -9,8 +9,11 @@ use App\Models\Inventory\Inventory;
 use App\Models\Recipe;
 use App\Models\Ingredient;
 use App\Models\Order;
+use App\Models\OrderDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+
+use function Symfony\Component\VarDumper\Dumper\esc;
 
 class ChefController extends Controller
 {
@@ -106,9 +109,10 @@ class ChefController extends Controller
 
     //confirm items from order
     public function ChefOrder($emp_id, $order_id, $item_code, $quantity){
-        $data = Chef_inventory::where("emp_id",$emp_id)->get();
+        $data = Chef_inventory::where("emp_id",$emp_id)->whereDate('created_at', date("Y-m-d"))->get();
         $item = Recipe::where('item_code', $item_code)->get();
         $orders = Order::where('order_id', $order_id)->first();
+        $order_details = OrderDetail::where('order_id', $order_id)->where('item_code', $item_code)->first();
         $msg = array();
         $status = false;
 
@@ -137,8 +141,10 @@ class ChefController extends Controller
         }
 
         if($status){
-            $orders->order_status = "running";
-            if($orders->update()){
+
+            $order_details->status = "running";
+
+            if($order_details->update()){
                 $chef = new Chef_order();
                 $chef->emp_id = $emp_id;
                 $chef->order_id = $order_id;

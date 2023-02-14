@@ -115,19 +115,33 @@ class ChefController extends Controller
         $order_details = OrderDetail::where('order_id', $order_id)->where('item_code', $item_code)->first();
         $msg = array();
         $status = false;
+        $check = false;
+        $unit = "";	
 
         for($i=0; $i<count($item); $i++){
             for($j=0; $j<count($data); $j++){
                 if($item[$i]->ingredient_id == $data[$j]->ingredient_id){
-                    $data[$j]->used_quantity = $item[$i]->ingredient_quantity * $quantity;
-                    if($data[$j]->quantity < 0){
+                    if(($item[$i]->ingredient_quantity * $quantity) > ($data[$j]->quantity - $data[$j]->used_quantity)){
                         $ingredient = Ingredient::where('id', $data[$j]->ingredient_id)->first();
-                        $msg[] = ' ' . abs($data[$j]->quantity) . $data[$j]->unit . ' ' . $ingredient->ingredient;
+                        $msg[] = ' ' . abs(($item[$i]->ingredient_quantity * $quantity) - ($data[$j]->quantity - $data[$j]->used_quantity)) . $data[$j]->unit . ' ' . $ingredient->ingredient;
+                        $check = true;
+                        break;
                     }
-                    
+                    else{
+                        $data[$j]->used_quantity = $data[$j]->used_quantity + ($item[$i]->ingredient_quantity * $quantity);
+                        $check = true;
+                        break;
+                    }
                 }
+                $unit = $data[$j]->unit;
+                $check = false;
+            }
+            if(!$check){
+                $ingredient = Ingredient::where('id', $item[$i]->ingredient_id)->first();
+                $msg[] = ' ' . abs($item[$i]->ingredient_quantity * $quantity) . $unit . ' ' . $ingredient->ingredient;
             }
         }
+
         if($msg){
             return response()->json($msg);
         }
@@ -141,9 +155,7 @@ class ChefController extends Controller
         }
 
         if($status){
-
             $order_details->status = "running";
-
             if($order_details->update()){
                 $chef = new Chef_order();
                 $chef->emp_id = $emp_id;

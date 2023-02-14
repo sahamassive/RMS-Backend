@@ -20,11 +20,8 @@ class RestaurantController extends Controller
     //single Restaurant
 
     public function getRestaurant($id){
-      
-            $data= Restuarant::where('restaurant_id',$id)->first();
-            return response()->json($data);
-       
- 
+        $data= Restuarant::where('restaurant_id',$id)->first();
+        return response()->json($data);
     }
     public function getDefBranch($id,$city){
         $data= Branch::where('restaurant_id',$id)->where('city',$city)->first();

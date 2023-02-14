@@ -20,6 +20,7 @@ use App\Http\Controllers\Inventory\SupplierController;
 use App\Http\Controllers\Inventory\InvoiceController;
 use App\Http\Controllers\Inventory\InventoryController;
 use App\Http\Controllers\ChefController;
+use App\Http\Controllers\TableController;
 
 
 
@@ -208,5 +209,18 @@ Route::post('inventory-transfer',[InventoryController::class,'inventoryTransfer'
 Route::get('chefs/{id}',[ChefController::class,'index']);
 Route::get('chef-inventory/{emp_id}',[ChefController::class,'ChefInventory']);
 Route::get('chef-order/{emp_id}/{order_id}/{food_id}/{quantity}',[ChefController::class,'ChefOrder']);
+
+//table
+Route::post('table-insert',[TableController::class,'tableInsert']);
+Route::get('tables/{id}',[TableController::class,'tableList']);
+Route::get('table-edit/{id}',[TableController::class,'editTable']);
+Route::post('table-edit/{id}',[TableController::class,'updateTable']);
+
+//table type
+Route::post('table-type-insert',[TableController::class,'typeInsert']);
+Route::get('table-type-list/{id}',[TableController::class,'typeList']);
+Route::get('table-type-status/{id}',[TableController::class,'tableTypeStatus']);
+Route::get('table-type-edit/{id}',[TableController::class,'editTableType']);
+Route::post('table-type-edit/{id}',[TableController::class,'updateTableType']);
 
 

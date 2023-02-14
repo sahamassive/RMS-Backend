@@ -144,7 +144,7 @@ Route::get('restaurant/{id}/{city}',[RestaurantController::class,'getDefBranch']
 Route::post('order-store',[OrderController::class,'orderInsert']);
 Route::get('orders',[OrderController::class,'index']);
 Route::get('order/recent-order',[OrderController::class,'recentOrder']);
-
+Route::get('get-msp/{id}',[OrderController::class,'getMsp']);
 //waste
 Route::post('waste-insert',[WasteController::class,'wasteInsert']);
 Route::get('wastes',[WasteController::class,'allWaste']);

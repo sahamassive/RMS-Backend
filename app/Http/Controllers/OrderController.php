@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\OrderDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 
 class OrderController extends Controller
 {
@@ -84,5 +85,16 @@ class OrderController extends Controller
             'data' => $data,
             'id' => $id
         ]);
+    }
+
+    public function getMsp($id){
+       $response= Http::get('https://mirpur-club.bein-mcl.com/api/get-msp/'.$id);
+       $data=$response->json();
+       if($data){
+        return response()->json($data);
+       }else{
+        return response()->json('not a member');
+       }
+      
     }
 }

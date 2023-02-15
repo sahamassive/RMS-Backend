@@ -71,9 +71,11 @@ class OrderController extends Controller
     //get recent orders
     public function recentOrder(){
         //fetch data from database
-        $id = Order::select('order_id')
+        $id = OrderDetail::select('order_id')
+                    ->where('status', 'pending')
                     ->whereDate('created_at', date("Y-m-d"))
                     ->get();
+        $id=$id->unique('order_id');
         $data = DB::table('orders')
                     ->join('order_details','order_details.order_id', '=', 'orders.order_id')
                     ->join('food','order_details.food_id', '=', 'food.id')
@@ -88,13 +90,12 @@ class OrderController extends Controller
     }
 
     public function getMsp($id){
-       $response= Http::get('https://mirpur-club.bein-mcl.com/api/get-msp/'.$id);
-       $data=$response->json();
-       if($data){
-        return response()->json($data);
-       }else{
-        return response()->json('not a member');
-       }
-      
-    }
+        $response= Http::get('https://mirpur-club.bein-mcl.com/api/get-msp/'.$id);
+        $data=$response->json();
+        if($data){
+            return response()->json($data);
+        }else{
+            return response()->json('not a member');
+        }
+        }
 }

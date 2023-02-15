@@ -207,8 +207,10 @@ Route::post('inventory-transfer',[InventoryController::class,'inventoryTransfer'
 
 //chef
 Route::get('chefs/{id}',[ChefController::class,'index']);
-Route::get('chef-inventory/{emp_id}',[ChefController::class,'ChefInventory']);
+Route::get('chef-inventory/{emp_id}/{filter}',[ChefController::class,'ChefInventory']);
 Route::get('chef-order/{emp_id}/{order_id}/{food_id}/{quantity}',[ChefController::class,'ChefOrder']);
+Route::get('chef-attend-order/{emp_id}/{filter}',[ChefController::class,'ChefAttendOrder']);
+Route::get('chef-attend-order-status/{order_id}/{item_code}',[ChefController::class,'ChefAttendOrderStatus']);
 
 //table
 Route::post('table-insert',[TableController::class,'tableInsert']);

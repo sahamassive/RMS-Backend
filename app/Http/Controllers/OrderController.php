@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\OrderDetail;
+use App\Models\PosOrder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
@@ -37,15 +38,25 @@ class OrderController extends Controller
         $id=rand ( 10000 , 99999 );
         if($request->pickup_method=='pos'){
             $orderId='Pos-'.date('hi').$id.'-'.$extension;
+            $customerId='pos-order';
+            $pos=new PosOrder();
+            $pos->restaurant_id=$request->restaurant_id;
+            $pos->order_id=$orderId;
+            $pos->customer_name=$request->customer_name;
+            $pos->customer_phone=$request->customer_phone;
+            $pos->table_id=$request->table_id;
+            $pos->waiter_id=$request->waiter_id;
+            $pos->save();
         }else{
             $orderId='Cus-'.date('hi').$id.'-'.$extension;
+            $customerId=10;
         }
         
         $order=new Order();
         $order->order_id=$orderId; 
         $order->restaurant_id=$request->restaurant_id;
         $order->branch_id=$request->branch_id;
-        $order->customer_id=10;
+        $order->customer_id=$customerId;
         $order->order_status = "pending";
         $order->item=$request->item;
         $order->total_price=$request->total;

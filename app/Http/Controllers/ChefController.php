@@ -96,14 +96,37 @@ class ChefController extends Controller
     }
 
     //take inventory items from inventory list
-    public function ChefInventory($emp_id){
-        $data = DB::table('chef_inventories')
-                ->join('ingredients', 'ingredients.id', '=', 'chef_inventories.ingredient_id')
-                ->where('chef_inventories.emp_id',$emp_id)
-                ->whereDate('chef_inventories.created_at', date("Y-m-d"))
-                ->select('chef_inventories.*', 'ingredients.ingredient')
-                ->orderBy('chef_inventories.created_at','DESC')
-                ->get();
+    public function ChefInventory($emp_id, $filter){
+        $res = date("Y-m-d");
+        if($filter == 'yesterday'){
+            $res1 = date('Y-m-d', strtotime('-1 days'));
+        }
+        elseif($filter == 'week'){
+            $res1 = date('Y-m-d', strtotime('-7 days'));
+        }
+        elseif($filter == 'month'){
+            $res1 = date('Y-m-d', strtotime('-30 days'));
+        }
+
+        if($filter == 'today'){
+            $data = DB::table('chef_inventories')
+                        ->join('ingredients', 'ingredients.id', '=', 'chef_inventories.ingredient_id')
+                        ->where('chef_inventories.emp_id',$emp_id)
+                        ->whereDate('chef_inventories.created_at', $res)
+                        ->select('chef_inventories.*', 'ingredients.ingredient')
+                        ->orderBy('chef_inventories.created_at','DESC')
+                        ->get();
+        }
+        else{
+            $data = DB::table('chef_inventories')
+                        ->join('ingredients', 'ingredients.id', '=', 'chef_inventories.ingredient_id')
+                        ->where('chef_inventories.emp_id',$emp_id)
+                        ->whereBetween('chef_inventories.created_at', [$res1, $res])
+                        ->select('chef_inventories.*', 'ingredients.ingredient')
+                        ->groupBy('chef_inventories.ingredient_id')
+                        ->orderBy('chef_inventories.created_at','DESC')
+                        ->get();
+        }
         return response()->json($data);
     }
 
@@ -112,10 +135,12 @@ class ChefController extends Controller
         $data = Chef_inventory::where("emp_id",$emp_id)->whereDate('created_at', date("Y-m-d"))->get();
         $item = Recipe::where('item_code', $item_code)->get();
         $orders = Order::where('order_id', $order_id)->first();
+        $ordersAll = OrderDetail::where('order_id', $order_id)->get();
         $order_details = OrderDetail::where('order_id', $order_id)->where('item_code', $item_code)->first();
         $msg = array();
         $status = false;
         $check = false;
+        $check2 = false;
         $unit = "";	
 
         for($i=0; $i<count($item); $i++){
@@ -133,12 +158,11 @@ class ChefController extends Controller
                         break;
                     }
                 }
-                $unit = $data[$j]->unit;
                 $check = false;
             }
             if(!$check){
                 $ingredient = Ingredient::where('id', $item[$i]->ingredient_id)->first();
-                $msg[] = ' ' . abs($item[$i]->ingredient_quantity * $quantity) . $unit . ' ' . $ingredient->ingredient;
+                $msg[] = ' ' . abs($item[$i]->ingredient_quantity * $quantity) . ' ' . $ingredient->ingredient;
             }
         }
 
@@ -160,7 +184,7 @@ class ChefController extends Controller
                 $chef = new Chef_order();
                 $chef->emp_id = $emp_id;
                 $chef->order_id = $order_id;
-                $chef->kot = '01'.date('hi');
+                $chef->kot = 'K-'.'01'.date('hi');
                 $chef->status = 'running';
                 $chef->quantity = $quantity;
                 $chef->item_code = $item_code;
@@ -181,6 +205,56 @@ class ChefController extends Controller
                     'msg' => 'Error Ouucred'
                 ]);
             }
+        }
+    }
+
+    //how many orders chef attend
+    public function ChefAttendOrder($emp_id, $filter){
+        $res = date("Y-m-d");
+        if($filter == 'yesterday'){
+            $res1 = date('Y-m-d', strtotime('-1 days'));
+        }
+        elseif($filter == 'week'){
+            $res1 = date('Y-m-d', strtotime('-7 days'));
+        }
+        elseif($filter == 'month'){
+            $res1 = date('Y-m-d', strtotime('-30 days'));
+        }
+
+        if($filter == 'today'){
+            $data = DB::table('chef_orders')
+                        ->join('food', 'food.item_code', '=', 'chef_orders.item_code')
+                        ->where('chef_orders.emp_id',$emp_id)
+                        ->where('chef_orders.status','running')
+                        ->whereDate('chef_orders.created_at', $res)
+                        ->select('chef_orders.*', 'food.name', 'food.image')
+                        ->orderBy('chef_orders.updated_at','DESC')
+                        ->get();
+        }
+        else{
+            $data = DB::table('chef_orders')
+                        ->join('food', 'food.item_code', '=', 'chef_orders.item_code')
+                        ->where('chef_orders.emp_id',$emp_id)
+                        ->whereBetween('chef_orders.created_at', [$res1, $res])
+                        ->select('chef_orders.*', 'food.name', 'food.image')
+                        ->orderBy('chef_orders.updated_at','DESC')
+                        ->get();
+        }
+        return response()->json($data);
+    }
+
+    //chef orders status update
+    public function ChefAttendOrderStatus($order_id, $item_code){
+        $data = Chef_order::where('order_id', $order_id)->where('item_code', $item_code)->first();
+        $data2 = OrderDetail::where('order_id', $order_id)->where('item_code', $item_code)->first();
+
+        $data->status = "completed";
+        $data2->status = "completed";
+
+        if($data->update() &  $data2->update()){
+            return response()->json([
+                'msg' => 'Status Updated'
+            ]);
         }
     }
 }

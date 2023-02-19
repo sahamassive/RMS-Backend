@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Waiter;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class WaiterController extends Controller
 {
@@ -81,5 +82,23 @@ class WaiterController extends Controller
     public function destroy(Waiter $waiter)
     {
         //
+    }
+
+    public function getWaiter(){
+        $waiters = Waiter::select('first_name','last_name', 'emp_id')->get();
+        $attendOrder = DB::table('waiters')
+                    ->join('pos_orders', 'waiters.emp_id', 'pos_orders.waiter_id')
+                    ->whereDate('pos_orders.created_at', date("Y-m-d"))
+                    ->where('pos_orders.status', 'pending')
+                    ->orWhere('pos_orders.status', 'running')
+                    ->select('pos_orders.waiter_id',DB::Raw(
+                        "COUNT(*) AS count"
+                    ))
+                    ->groupBy('pos_orders.waiter_id')
+                    ->get();
+        return response()->json([
+            'waiters' => $waiters,
+            'attendOrder' => $attendOrder
+        ]);
     }
 }

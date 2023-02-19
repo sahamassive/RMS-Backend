@@ -42,6 +42,7 @@ class OrderController extends Controller
             $pos=new PosOrder();
             $pos->restaurant_id=$request->restaurant_id;
             $pos->order_id=$orderId;
+            $pos->status="pending";
             $pos->customer_name=$request->customer_name;
             $pos->customer_phone=$request->customer_phone;
             $pos->table_id=$request->table_id;
@@ -49,14 +50,13 @@ class OrderController extends Controller
             $pos->save();
         }else{
             $orderId='Cus-'.date('hi').$id.'-'.$extension;
-            $customerId=10;
         }
         
         $order=new Order();
         $order->order_id=$orderId; 
         $order->restaurant_id=$request->restaurant_id;
         $order->branch_id=$request->branch_id;
-        $order->customer_id=$customerId;
+        $order->customer_id=$request->customer_id;
         $order->order_status = "pending";
         $order->item=$request->item;
         $order->total_price=$request->total;
@@ -108,5 +108,5 @@ class OrderController extends Controller
         }else{
             return response()->json('not a member');
         }
-        }
+    }
 }

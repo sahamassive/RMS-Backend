@@ -134,14 +134,10 @@ class ChefController extends Controller
     public function ChefOrder($emp_id, $order_id, $item_code, $quantity){
         $data = Chef_inventory::where("emp_id",$emp_id)->whereDate('created_at', date("Y-m-d"))->get();
         $item = Recipe::where('item_code', $item_code)->get();
-        $orders = Order::where('order_id', $order_id)->first();
-        $ordersAll = OrderDetail::where('order_id', $order_id)->get();
         $order_details = OrderDetail::where('order_id', $order_id)->where('item_code', $item_code)->first();
         $msg = array();
         $status = false;
         $check = false;
-        $check2 = false;
-        $unit = "";	
 
         for($i=0; $i<count($item); $i++){
             for($j=0; $j<count($data); $j++){

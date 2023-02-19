@@ -21,6 +21,8 @@ use App\Http\Controllers\Inventory\InvoiceController;
 use App\Http\Controllers\Inventory\InventoryController;
 use App\Http\Controllers\ChefController;
 use App\Http\Controllers\TableController;
+use App\Http\Controllers\WaiterController;
+use App\Http\Controllers\CustomerController;
 
 
 
@@ -185,8 +187,9 @@ Route::get('coupon-status/{id}',[CouponController::class,'couponStatus']);
 Route::get('coupon-edit/{id}',[CouponController::class,'editCoupon']);
 Route::post('coupon-edit/{id}',[CouponController::class,'updateCoupon']);
 
-
+//login user
 Route::post('login-dashboard',[LoginController::class,'loginDashboard']);
+Route::post('customer/login-dashboard',[LoginController::class,'CustomerloginDashboard']);
 
 //supplier
 Route::get('suppliers/{id}',[SupplierController::class,'index']);
@@ -224,5 +227,11 @@ Route::get('table-type-list/{id}',[TableController::class,'typeList']);
 Route::get('table-type-status/{id}',[TableController::class,'tableTypeStatus']);
 Route::get('table-type-edit/{id}',[TableController::class,'editTableType']);
 Route::post('table-type-edit/{id}',[TableController::class,'updateTableType']);
+
+//waiter
+Route::get('waiter-with-orders',[WaiterController::class,'getWaiter']);
+
+//customer
+Route::post('register-customer',[CustomerController::class,'customerInsert']);
 
 

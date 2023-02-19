@@ -18,6 +18,7 @@ class CreatePosOrdersTable extends Migration
             $table->string('restaurant_id');
             $table->string('branch_id')->nullable();
             $table->string('order_id');
+            $table->string('status');
             $table->string('customer_name')->nullable();
             $table->string('customer_phone')->nullable();
             $table->string('table_id')->nullable();

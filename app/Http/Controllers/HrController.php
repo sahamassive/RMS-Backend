@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Chef;
 use App\Models\Cleaner;
+use App\Models\Customer;
 use App\Models\Manager;
 use App\Models\data;
 use App\Models\Delivery_man;
@@ -128,6 +129,29 @@ class HrController extends Controller
           'msg'=>'Leave Inserted'
         ]);
 
+    }
+
+    //get user profile information 
+    public function profileInfo($type, $emp_id){
+      if($type=='waiter'){
+        $data = Waiter::where('emp_id', $emp_id)->first();
+      }
+      else if($type =='chef'){
+        $data = Chef::where('emp_id', $emp_id)->first();
+      }
+      else if($type =='manager'){
+        $data = Manager::where('emp_id', $emp_id)->first();
+      }
+      else if($type =='delivery_men'){
+        $data = Delivery_man::where('emp_id', $emp_id)->first();
+      }
+      else if($type =='cleaner'){
+        $data = Cleaner::where('emp_id', $emp_id)->first();
+      }
+      else if($type =='customer'){
+        $data = Customer::where('customer_id', $emp_id)->first();
+      }
+      return response()->json($data);
     }
 
 }

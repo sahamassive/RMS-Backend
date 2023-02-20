@@ -107,6 +107,7 @@ Route::get('get-employee/{filter}',[HrController::class,'getEmployee']);
 Route::post('department-insert',[HrController::class,'departmentInsert']);
 Route::get('departments',[HrController::class,'getDepartment']);
 Route::post('leave-insert',[HrController::class,'leaveInsert']);
+Route::get('profile/{type}/{emp_id}',[HrController::class,'profileInfo']);
 
 //booking
 Route::post('booking-insert',[BookingController::class,'bookingInsert']);
@@ -233,5 +234,6 @@ Route::get('waiter-with-orders',[WaiterController::class,'getWaiter']);
 
 //customer
 Route::post('register-customer',[CustomerController::class,'customerInsert']);
+Route::get('customer-order/{emp_id}',[CustomerController::class,'customerOrder']);
 
 

@@ -27,7 +27,8 @@ class LoginController extends Controller
                 $response =[
                     'message'=>'Login',
                     'token'=>$token,
-                    'type'=>$type
+                    'type'=>$type,
+                    'emp_id' => $user->emp_id
                 ];
                 return response($response,201);
             }else{

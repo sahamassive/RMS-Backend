@@ -87,12 +87,13 @@ class OrderController extends Controller
                     ->whereDate('created_at', date("Y-m-d"))
                     ->get();
         $id=$id->unique('order_id');
-        $data = DB::table('orders')
-                    ->join('order_details','order_details.order_id', '=', 'orders.order_id')
-                    ->join('food','order_details.food_id', '=', 'food.id')
+        $data = DB::table('order_details')
+                    ->join('orders','order_details.order_id', '=', 'orders.order_id')
+                    ->join('food','order_details.item_code', '=', 'food.item_code')
                     ->where('order_details.status', "pending")
                     ->whereDate('orders.created_at', date("Y-m-d"))
                     ->select('orders.*', 'order_details.*', 'food.name', 'food.image', 'food.item_code')
+                    ->orderBy('order_details.updated_at', 'DESC')
                     ->get();
         return response()->json([
             'data' => $data,

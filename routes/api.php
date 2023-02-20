@@ -23,8 +23,8 @@ use App\Http\Controllers\ChefController;
 use App\Http\Controllers\TableController;
 use App\Http\Controllers\WaiterController;
 use App\Http\Controllers\CustomerController;
-
-
+use App\Http\Controllers\LoginWithController;
+use App\Http\Controllers\RecaptchaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -89,6 +89,10 @@ Route::match(['get', 'post'], 'category-add-edit/{id?}',[CategoryController::cla
 Route::get('append-categories-level',[CategoryController::class,'appendCategoryLevel']);
 Route::post('category-insert',[CategoryController::class,'categoryInsert']);
 
+
+//recapcha
+Route::post('verify-recaptcha',[RecaptchaController::class,'verify']);
+Route::post('login/google',[LoginWithController::class,'handleGoogleLogin']);
 
 //food 
 Route::post('food-insert',[FoodController::class,'foodInsert']);

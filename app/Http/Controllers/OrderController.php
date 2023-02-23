@@ -50,13 +50,14 @@ class OrderController extends Controller
             $pos->save();
         }else{
             $orderId='Cus-'.date('hi').$id.'-'.$extension;
+            $customerId=$request->customer_id;
         }
         
         $order=new Order();
         $order->order_id=$orderId; 
         $order->restaurant_id=$request->restaurant_id;
         $order->branch_id=$request->branch_id;
-        $order->customer_id=$request->customer_id;
+        $order->customer_id=$customerId;
         $order->order_status = "pending";
         $order->item=$request->item;
         $order->total_price=$request->total;

@@ -18,9 +18,16 @@ class LoginController extends Controller
         ]);
 
         $type=$request->type;
+        if($type =='Super-Admin' || $type =='Admin'){
+            $query = "App\Models\\Admin";
+            $user = $query::where('email', $request->email)->first();
 
-        $query = "App\Models\\$type";
-        $user = $query::where('email', $request->email)->first();
+        }else{
+            $query = "App\Models\\$type";
+            $user = $query::where('email', $request->email)->first();
+        }
+
+       
         if($user){
             if (Hash::check($request->password,$user->password)) {
                 $token=  $user->createToken($request->device_name)->plainTextToken;

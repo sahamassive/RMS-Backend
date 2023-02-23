@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Admin;
 use Illuminate\Http\Request;
 use App\Models\Chef;
 use App\Models\Cleaner;
@@ -45,7 +46,12 @@ class HrController extends Controller
                 $data=new Cleaner();
                 $data->emp_id='Cl-'.'05'.date('hi').$id;;
             
+              }else if($type=="supr-admin" ||$type=='admin' || $type=='sub-admin'){
+                $data=new Admin();
+                $data->admin_type=$type;
+                $data->emp_id='Ad-'.'11'.date('hi').$id;;
               }
+
         $image=$request->file('image');
         if($image){
         

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Customer;
+use App\Models\DeliveryAddress;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use Illuminate\Support\Facades\DB;
@@ -33,24 +34,28 @@ class CustomerController extends Controller
     }
 
     //view customer order information
-    public function customerOrder($emp_id){
+    public function customerOrder($customer_id){
         $id = DB::table('orders')
-                    ->where('customer_id',$emp_id)
+                    ->where('customer_id',$customer_id)
                     ->where('order_status','pending')
                     ->orWhere('order_status', 'running')
                     ->select('order_id')
                     ->get();
-        $data = DB::table('order_details')
-                    ->join('orders', 'orders.order_id', '=', 'order_details.order_id')
+        $data = DB::table('orders')
+                    ->join('order_details', 'orders.order_id', '=', 'order_details.order_id')
                     ->join('food', 'food.item_code', '=', 'order_details.item_code')
-                    ->where('orders.customer_id', $emp_id)
-                    ->where('order_details.status', 'pending')
-                    ->orWhere('order_details.status', 'running')
                     ->select('food.name', 'food.image', 'order_details.*', 'orders.*')
+                    ->where('orders.customer_id', $customer_id)
                     ->get();
         return response()->json([
             'id' => $id,
             'data' => $data
         ]);
+    }
+
+    public function customerDeliveryAddress($customer_id){
+        $data=DeliveryAddress::where('customer_id',$customer_id)->first();
+        return response($data);
+
     }
 }

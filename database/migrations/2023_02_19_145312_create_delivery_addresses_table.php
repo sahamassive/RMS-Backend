@@ -15,6 +15,10 @@ class CreateDeliveryAddressesTable extends Migration
     {
         Schema::create('delivery_addresses', function (Blueprint $table) {
             $table->id();
+            $table->string('customer_id');
+            $table->string('city');
+            $table->string('address');
+            $table->string('indication')->nullable();
             $table->timestamps();
         });
     }

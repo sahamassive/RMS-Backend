@@ -43,17 +43,21 @@ use App\Http\Controllers\RecaptchaController;
 
 Route::middleware('auth:sanctum')->group(function () {
 
+    //branch
+    
+    
+    });
+
+Route::middleware('auth:sanctum')->group(function () {
+
 //branch
+
 Route::post('branch-insert',[BranchController::class,'branchInsert']);
 Route::get('branchs',[BranchController::class,'index']);
 Route::get('branch-status/{id}',[BranchController::class,'branchStatus']);
 Route::get('branch-edit/{id}',[BranchController::class,'editBranch']);
 Route::post('branch-edit/{id}',[BranchController::class,'updateBranch']);
 Route::post('branch-food-add',[BranchController::class,'branchFoodAdd']);
-
-
-});
-
 //Brands
 Route::get('brands',[BrandController::class,'brand']);
 Route::post('update-brand-status',[BrandController::class,'updateBrandStatus']);
@@ -65,7 +69,6 @@ Route::post('brand-insert',[BrandController::class,'brandInsert']);
 Route::get('brand-status/{id}',[BrandController::class,'brandStatus']);
 Route::get('brand-edit/{id}',[BrandController::class,'brandEdit']);
 Route::post('brand-update/{id}',[BrandController::class,'brandUpdate']);
-
 
 //Sections
 Route::get('sections',[SectionController::class,'sections']);
@@ -90,20 +93,13 @@ Route::get('append-categories-level',[CategoryController::class,'appendCategoryL
 Route::post('category-insert',[CategoryController::class,'categoryInsert']);
 
 
-//recapcha
-Route::post('verify-recaptcha',[RecaptchaController::class,'verify']);
-Route::post('login/google',[LoginWithController::class,'handleGoogleLogin']);
+//food
 
-//food 
-Route::post('food-insert',[FoodController::class,'foodInsert']);
-Route::get('foods',[FoodController::class,'foods']);
-Route::get('quick-foods/{id}/{bid}',[FoodController::class,'quickfoods']);
-Route::get('category-foods/{id}/{rid}/{bid}',[FoodController::class,'foodByCategory']);
+
 Route::get('food-edit/{id}',[FoodController::class,'foodEdit']);
 Route::post('food-edit/{id}',[FoodController::class,'foodUpdate']);
-Route::get('sp-foods',[FoodController::class,'spFoods']);
+Route::post('food-insert',[FoodController::class,'foodInsert']);
 
-Route::get('quick-foods-branch/{id}/{bid}',[FoodController::class,'quickfoodsBranch']);
 
 //Employee
 Route::post('employee-insert',[HrController::class,'employeeInsert']);
@@ -113,46 +109,15 @@ Route::get('departments',[HrController::class,'getDepartment']);
 Route::post('leave-insert',[HrController::class,'leaveInsert']);
 Route::get('profile/{type}/{emp_id}',[HrController::class,'profileInfo']);
 
-//booking
-Route::post('booking-insert',[BookingController::class,'bookingInsert']);
-Route::get('bookings',[BookingController::class,'getBooking']);
-
-
-// Product
-Route::get('products',[ProductController::class,'products'])->name('admin.view-products');
-Route::post('update-product-status',[ProductController::class,'updateProductStatus']);
-
-//Product delete
-Route::get('product-delete/{id}',[ProductController::class,'deleteProduct'])->name('deleteProduct');
-//Product Image delete
-Route::get('product-add-edit/product-image-delete/{id}',[ProductController::class,'deleteProductImage'])->name('deleteProductImage');
-//Product Video delete
-Route::get('product-add-edit/product-video-delete/{id}',[ProductController::class,'deleteProductVideo'])->name('deleteProductVideo');
-
-//Product Add & Update
-Route::match(['get', 'post'], 'product-add-edit/{id?}',[ProductController::class,'add_edit_product']);
-// Products Attribute Add
-Route::match(['get', 'post'], 'product-add-edit-attribute/{id}',[ProductController::class,'addAttributes']);
-
-
-//restaurant
+//restaurants
 Route::post('restaurant-insert',[RestaurantController::class,'restaurantInsert']);
 Route::get('restaurants',[RestaurantController::class,'index']);
 Route::get('/restaurant/branchs/{restaurant_id}',[RestaurantController::class,'allRestaurantsBranches']);
 Route::get('restaurant-status/{id}',[RestaurantController::class,'restaurantStatus']);
 Route::get('restaurant-edit/{id}',[RestaurantController::class,'editRestaurant']);
 Route::post('restaurant-edit/{id}',[RestaurantController::class,'updateRestaurant']);
-Route::get('restaurant/{id}',[RestaurantController::class,'getRestaurant']);
-Route::get('branch/{id}',[RestaurantController::class,'getBranch']);
-Route::get('restaurant/{id}/{city}',[RestaurantController::class,'getDefBranch']);
 
 
-
-//order
-Route::post('order-store',[OrderController::class,'orderInsert']);
-Route::get('orders',[OrderController::class,'index']);
-Route::get('order/recent-order',[OrderController::class,'recentOrder']);
-Route::get('get-msp/{id}',[OrderController::class,'getMsp']);
 //waste
 Route::post('waste-insert',[WasteController::class,'wasteInsert']);
 Route::get('wastes',[WasteController::class,'allWaste']);
@@ -192,9 +157,6 @@ Route::get('coupon-status/{id}',[CouponController::class,'couponStatus']);
 Route::get('coupon-edit/{id}',[CouponController::class,'editCoupon']);
 Route::post('coupon-edit/{id}',[CouponController::class,'updateCoupon']);
 
-//login user
-Route::post('login-dashboard',[LoginController::class,'loginDashboard']);
-Route::post('customer/login-dashboard',[LoginController::class,'CustomerloginDashboard']);
 
 //supplier
 Route::get('suppliers/{id}',[SupplierController::class,'index']);
@@ -233,11 +195,83 @@ Route::get('table-type-status/{id}',[TableController::class,'tableTypeStatus']);
 Route::get('table-type-edit/{id}',[TableController::class,'editTableType']);
 Route::post('table-type-edit/{id}',[TableController::class,'updateTableType']);
 
+});
+
+
+
+
+
+
+
+
+//recapcha
+Route::post('verify-recaptcha',[RecaptchaController::class,'verify']);
+Route::post('login/google',[LoginWithController::class,'handleGoogleLogin']);
+
+//food 
+
+Route::get('category-foods/{id}/{rid}/{bid}',[FoodController::class,'foodByCategory']);
+
+Route::get('foods',[FoodController::class,'foods']);
+Route::get('quick-foods/{id}/{bid}',[FoodController::class,'quickfoods']);
+
+Route::get('sp-foods',[FoodController::class,'spFoods']);
+
+Route::get('quick-foods-branch/{id}/{bid}',[FoodController::class,'quickfoodsBranch']);
+
+
+
+//booking
+Route::post('booking-insert',[BookingController::class,'bookingInsert']);
+Route::get('bookings',[BookingController::class,'getBooking']);
+
+
+// Product
+Route::get('products',[ProductController::class,'products'])->name('admin.view-products');
+Route::post('update-product-status',[ProductController::class,'updateProductStatus']);
+
+//Product delete
+Route::get('product-delete/{id}',[ProductController::class,'deleteProduct'])->name('deleteProduct');
+//Product Image delete
+Route::get('product-add-edit/product-image-delete/{id}',[ProductController::class,'deleteProductImage'])->name('deleteProductImage');
+//Product Video delete
+Route::get('product-add-edit/product-video-delete/{id}',[ProductController::class,'deleteProductVideo'])->name('deleteProductVideo');
+
+//Product Add & Update
+Route::match(['get', 'post'], 'product-add-edit/{id?}',[ProductController::class,'add_edit_product']);
+// Products Attribute Add
+Route::match(['get', 'post'], 'product-add-edit-attribute/{id}',[ProductController::class,'addAttributes']);
+
+
+//restaurant
+
+Route::get('restaurant/{id}',[RestaurantController::class,'getRestaurant']);
+Route::get('branch/{id}',[RestaurantController::class,'getBranch']);
+Route::get('restaurant/{id}/{city}',[RestaurantController::class,'getDefBranch']);
+
+
+
+//order
+Route::post('order-store',[OrderController::class,'orderInsert']);
+Route::get('orders',[OrderController::class,'index']);
+Route::get('order/recent-order',[OrderController::class,'recentOrder']);
+Route::get('get-msp/{id}',[OrderController::class,'getMsp']);
+
+
+
+
+
+//login user
+Route::post('login-dashboard',[LoginController::class,'loginDashboard']);
+Route::post('customer/login-dashboard',[LoginController::class,'CustomerloginDashboard']);
+
+
+
 //waiter
 Route::get('waiter-with-orders',[WaiterController::class,'getWaiter']);
 
 //customer
 Route::post('register-customer',[CustomerController::class,'customerInsert']);
-Route::get('customer-order/{emp_id}',[CustomerController::class,'customerOrder']);
-
+Route::get('customer-order/{customer_id}',[CustomerController::class,'customerOrder']);
+Route::get('get-delivery-address/{customer_id}',[CustomerController::class,'customerDeliveryAddress']);
 

@@ -15,6 +15,8 @@ use App\Models\Leave;
 use App\Models\Waiter;
 use Illuminate\Support\Facades\Hash;
 use Image;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 
 class HrController extends Controller
 {
@@ -134,11 +136,10 @@ class HrController extends Controller
         return response()->json([
           'msg'=>'Leave Inserted'
         ]);
-
     }
 
-    //get user profile information 
-    public function profileInfo($type, $emp_id){
+    //earch in database 
+    public function search($type, $emp_id){
       if($type=='Waiter'){
         $data = Waiter::where('emp_id', $emp_id)->first();
       }
@@ -154,9 +155,172 @@ class HrController extends Controller
       else if($type =='Cleaner'){
         $data = Cleaner::where('emp_id', $emp_id)->first();
       }
-      else if($type =='customer'){
+      else if($type =='Customer'){
         $data = Customer::where('customer_id', $emp_id)->first();
       }
+      else if($type=="Super-Admin" ||$type=='Admin' || $type=='Sub-Admin'){
+        $data = Admin::where('emp_id', $emp_id)->first();
+      }
+      return $data;
+    }
+
+    //get user profile information 
+    public function profileInfo($type, $emp_id){
+      $data = $this->search($type, $emp_id);
       return response()->json($data);
     }
+
+    //update profile information
+    public function updateProfileInfo(Request $request, $type, $emp_id){
+      $data = $this->search($type, $emp_id);
+      $data->first_name = $request->first_name;
+      $data->last_name = $request->last_name;
+      $data->email = $request->email;
+      $data->phone = $request->phone;
+      $data->address = $request->address;
+      $data->country = $request->country;
+      $data->state = $request->state;
+      $data->city = $request->city;
+      $data->zip_code = $request->zip_code;
+      $data->birth_date = $request->birth_date;
+
+      //check image
+      $image=$request->file('image');
+      if($image)
+      {
+          $extension = $image->getClientOriginalExtension();
+          if(
+              $extension == 'jpeg' || $extension == 'JPEG' ||
+              $extension == 'jpg' || $extension == 'JPG' ||
+              $extension == 'img' || $extension == 'IMG' ||
+              $extension == 'png' || $extension == 'PNG'
+          ){
+              //image path
+              $path2 = public_path('employee/medium/' . $request->image);
+              $path3 = public_path('employee/small/' . $request->image);
+              if (File::exists($path2)) {
+                  //delete prevoius image
+                  @unlink($path2);	
+                  @unlink($path3);	
+              }
+              //change image name
+              $imageName = time() . "." . $extension;
+              //store image
+              $mediumimagePath = public_path('employee/medium/'.$imageName);
+              $smallimagePath  = public_path('employee/small/'.$imageName);
+
+              //customize image size
+              Image::make($image)->resize(500,500)->save($mediumimagePath);
+              Image::make($image)->resize(250,250)->save($smallimagePath);
+
+              $data->image = $imageName;
+          }
+          else{
+              return response()->json([
+                  //error message
+                  'msg'=>'Your inserted file is not an image.'
+              ]);
+          }
+        }
+
+
+        if($data->update()){
+            return response()->json([
+                'msg'=>'Updated Successfully'
+                ]);
+        }
+        else{
+            return response()->json([
+                'msg'=>'Error Occured'
+                ]);
+        }
+    }
+
+    //update password
+    public function updatePassword(Request $request, $type, $emp_id){
+      $data = $this->search($type, $emp_id);
+
+      if(Hash::check($request->ppassword, $data->password)){
+        $data->password = Hash::make($request->password);
+        if($data->update()){
+          return response()->json([
+            'msg'=>'Password updated successfully',
+            'icon'=>'success'
+            ]);
+        }
+        else{
+          return response()->json([
+            'msg'=>'Error Occured...',
+            'icon'=>'error'
+            ]);
+        }
+      }
+      else{
+        return response()->json([
+          'msg'=>'Failed! Previous password did not match...',
+          'icon'=>'error'
+          ]);
+      }
+    }
+
+        //update profile information
+        public function customerProfile(Request $request, $type, $emp_id){
+          $data = $this->search($type, $emp_id);
+          $data->name = $request->name;
+          $data->email = $request->email;
+          $data->phone = $request->phone;
+          $data->address = $request->address;
+          $data->delivery_address = $request->delivery_address;
+    
+          //check image
+          $image=$request->file('image');
+          if($image)
+          {
+              $extension = $image->getClientOriginalExtension();
+              if(
+                  $extension == 'jpeg' || $extension == 'JPEG' ||
+                  $extension == 'jpg' || $extension == 'JPG' ||
+                  $extension == 'img' || $extension == 'IMG' ||
+                  $extension == 'png' || $extension == 'PNG'
+              ){
+                  //image path
+                  $path2 = public_path('customer/medium/' . $request->image);
+                  $path3 = public_path('customer/small/' . $request->image);
+                  if (File::exists($path2)) {
+                      //delete prevoius image
+                      @unlink($path2);	
+                      @unlink($path3);	
+                  }
+                  //change image name
+                  $imageName = time() . "." . $extension;
+                  //store image
+                  $mediumimagePath = public_path('customer/medium/'.$imageName);
+                  $smallimagePath  = public_path('customer/small/'.$imageName);
+    
+                  //customize image size
+                  Image::make($image)->resize(500,500)->save($mediumimagePath);
+                  Image::make($image)->resize(250,250)->save($smallimagePath);
+    
+                  $data->image = $imageName;
+              }
+              else{
+                  return response()->json([
+                      //error message
+                      'msg'=>'Your inserted file is not an image.'
+                  ]);
+              }
+            }
+    
+    
+            if($data->update()){
+                return response()->json([
+                    'msg'=>'Updated Successfully'
+                    ]);
+            }
+            else{
+                return response()->json([
+                    'msg'=>'Error Occured'
+                    ]);
+            }
+        }
 }

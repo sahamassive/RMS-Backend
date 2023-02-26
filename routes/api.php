@@ -23,6 +23,7 @@ use App\Http\Controllers\ChefController;
 use App\Http\Controllers\TableController;
 use App\Http\Controllers\WaiterController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LoginWithController;
 use App\Http\Controllers\RecaptchaController;
 
@@ -43,6 +44,14 @@ use App\Http\Controllers\RecaptchaController;
 
 
 Route::middleware('auth:sanctum')->group(function () {
+
+    
+//dashbord
+Route::get('trending-order/{id}',[DashboardController::class,'trending']);
+Route::get('total-sales-month-wise/{id}',[DashboardController::class,'totalSalesMonthWise']);
+Route::get('total-sales-day-wise/{id}',[DashboardController::class,'totalSalesDaykWise']);
+Route::get('year-wise-comparison/{id}',[DashboardController::class,'yearWiseComparison']);
+Route::get('today-data/{id}',[DashboardController::class,'todayData']);
 
 //branch
 

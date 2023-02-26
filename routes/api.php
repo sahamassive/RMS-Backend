@@ -75,12 +75,13 @@ Route::post('section-insert',[SectionController::class,'sectionInsert']);
 Route::get('section-edit/{id}',[SectionController::class,'sectionEdit']);
 Route::post('section-update/{id}',[SectionController::class,'sectionUpdate']);
 Route::get('section-status/{id}',[SectionController::class,'sectionStatus']);
+
 // Categories
-
-
 Route::post('update-category-status',[CategoryController::class,'updateCategoryStatus']);
+
 //categorie delete
 Route::get('category-delete/{id}',[CategoryController::class,'deleteCategory'])->name('deleteCategory');
+
 //categorie Add & Update
 Route::match(['get', 'post'], 'category-add-edit/{id?}',[CategoryController::class,'add_edit_category']);
 Route::get('append-categories-level',[CategoryController::class,'appendCategoryLevel']);
@@ -88,8 +89,6 @@ Route::post('category-insert',[CategoryController::class,'categoryInsert']);
 
 
 //food
-
-
 Route::get('food-edit/{id}',[FoodController::class,'foodEdit']);
 Route::post('food-edit/{id}',[FoodController::class,'foodUpdate']);
 Route::post('food-insert',[FoodController::class,'foodInsert']);
@@ -102,6 +101,9 @@ Route::post('department-insert',[HrController::class,'departmentInsert']);
 Route::get('departments',[HrController::class,'getDepartment']);
 Route::post('leave-insert',[HrController::class,'leaveInsert']);
 Route::get('profile/{type}/{emp_id}',[HrController::class,'profileInfo']);
+Route::post('edit-profile/{type}/{emp_id}',[HrController::class,'updateProfileInfo']);
+Route::post('change-password/{type}/{emp_id}',[HrController::class,'updatePassword']);
+Route::post('edit-customer-profile/{type}/{emp_id}',[HrController::class,'customerProfile']);
 
 //restaurants
 Route::post('restaurant-insert',[RestaurantController::class,'restaurantInsert']);

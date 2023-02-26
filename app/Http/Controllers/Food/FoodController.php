@@ -101,57 +101,57 @@ public function foodUpdate(Request $request, $id){
     $food->meta_description=$request->meta_description;
     $food->meta_keywords=$request->meta_keywords;
 
-        //check image
-        $image=$request->file('image');
-        if($image){
-            $extension = $image->getClientOriginalExtension();
-            if(
-                $extension == 'jpeg' || $extension == 'JPEG' ||
-                $extension == 'jpg' || $extension == 'JPG' ||
-                $extension == 'img' || $extension == 'IMG' ||
-                $extension == 'png' || $extension == 'PNG'
-            ){
-                //image path
-                $path1 = public_path('foods/large/' . $food->image);
-                $path2 = public_path('foods/medium/' . $food->image);
-                $path3 = public_path('foods/small/' . $food->image);
-                if (File::exists($path1)) {
-                    //delete prevoius image
-                    @unlink($path1);	
-                    @unlink($path2);	
-                    @unlink($path3);	
-                }
-                //change image name
-                $imageName = time() . "." . $extension;
-                //store image
-                $largeimagePath = public_path('foods/large/'.$imageName);
-                $mediumimagePath = public_path('foods/medium/'.$imageName);
-                $smallimagePath  = public_path('foods/small/'.$imageName);
-
-                //customize image size
-                Image::make($image)->resize(1000,1000)->save($largeimagePath);
-                Image::make($image)->resize(500,500)->save($mediumimagePath);
-                Image::make($image)->resize(250,250)->save($smallimagePath);
-
-                $food->image = $imageName;
+    //check image
+    $image=$request->file('image');
+    if($image){
+        $extension = $image->getClientOriginalExtension();
+        if(
+            $extension == 'jpeg' || $extension == 'JPEG' ||
+            $extension == 'jpg' || $extension == 'JPG' ||
+            $extension == 'img' || $extension == 'IMG' ||
+            $extension == 'png' || $extension == 'PNG'
+        ){
+            //image path
+            $path1 = public_path('foods/large/' . $food->image);
+            $path2 = public_path('foods/medium/' . $food->image);
+            $path3 = public_path('foods/small/' . $food->image);
+            if (File::exists($path1)) {
+                //delete prevoius image
+                @unlink($path1);	
+                @unlink($path2);	
+                @unlink($path3);	
             }
-            else{
-                return response()->json([
-                    //error message
-                    'msg'=>'Your inserted file is not an image.'
-                ]);
-            }
-        }
-        if($food->update()){
-            return response()->json([
-                'msg'=>'Food Updated Successfully'
-                ]);
+            //change image name
+            $imageName = time() . "." . $extension;
+            //store image
+            $largeimagePath = public_path('foods/large/'.$imageName);
+            $mediumimagePath = public_path('foods/medium/'.$imageName);
+            $smallimagePath  = public_path('foods/small/'.$imageName);
+
+            //customize image size
+            Image::make($image)->resize(1000,1000)->save($largeimagePath);
+            Image::make($image)->resize(500,500)->save($mediumimagePath);
+            Image::make($image)->resize(250,250)->save($smallimagePath);
+
+            $food->image = $imageName;
         }
         else{
             return response()->json([
-                'msg'=>'Error Occured'
-                ]);
+                //error message
+                'msg'=>'Your inserted file is not an image.'
+            ]);
         }
+    }
+    if($food->update()){
+        return response()->json([
+            'msg'=>'Food Updated Successfully'
+            ]);
+    }
+    else{
+        return response()->json([
+            'msg'=>'Error Occured'
+            ]);
+    }
 
 }
 

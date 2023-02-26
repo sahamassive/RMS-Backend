@@ -139,19 +139,19 @@ class HrController extends Controller
 
     //get user profile information 
     public function profileInfo($type, $emp_id){
-      if($type=='waiter'){
+      if($type=='Waiter'){
         $data = Waiter::where('emp_id', $emp_id)->first();
       }
-      else if($type =='chef'){
+      else if($type =='Chef'){
         $data = Chef::where('emp_id', $emp_id)->first();
       }
-      else if($type =='manager'){
+      else if($type =='Manager'){
         $data = Manager::where('emp_id', $emp_id)->first();
       }
-      else if($type =='delivery_men'){
+      else if($type =='Delivery_men'){
         $data = Delivery_man::where('emp_id', $emp_id)->first();
       }
-      else if($type =='cleaner'){
+      else if($type =='Cleaner'){
         $data = Cleaner::where('emp_id', $emp_id)->first();
       }
       else if($type =='customer'){

@@ -41,12 +41,6 @@ use App\Http\Controllers\RecaptchaController;
 //     return $request->user();
 // });
 
-Route::middleware('auth:sanctum')->group(function () {
-
-    //branch
-    
-    
-    });
 
 Route::middleware('auth:sanctum')->group(function () {
 
@@ -83,7 +77,7 @@ Route::post('section-update/{id}',[SectionController::class,'sectionUpdate']);
 Route::get('section-status/{id}',[SectionController::class,'sectionStatus']);
 // Categories
 
-Route::get('categories',[CategoryController::class,'categories'])->name('admin.view-categories');
+
 Route::post('update-category-status',[CategoryController::class,'updateCategoryStatus']);
 //categorie delete
 Route::get('category-delete/{id}',[CategoryController::class,'deleteCategory'])->name('deleteCategory');
@@ -184,7 +178,6 @@ Route::get('chef-attend-order-status/{order_id}/{item_code}',[ChefController::cl
 
 //table
 Route::post('table-insert',[TableController::class,'tableInsert']);
-Route::get('tables/{id}',[TableController::class,'tableList']);
 Route::get('table-edit/{id}',[TableController::class,'editTable']);
 Route::post('table-edit/{id}',[TableController::class,'updateTable']);
 
@@ -194,6 +187,11 @@ Route::get('table-type-list/{id}',[TableController::class,'typeList']);
 Route::get('table-type-status/{id}',[TableController::class,'tableTypeStatus']);
 Route::get('table-type-edit/{id}',[TableController::class,'editTableType']);
 Route::post('table-type-edit/{id}',[TableController::class,'updateTableType']);
+
+//customer
+Route::get('customer-order/{customer_id}',[CustomerController::class,'customerOrder']);
+Route::get('get-delivery-address/{customer_id}',[CustomerController::class,'customerDeliveryAddress']);
+Route::post('change-delivery-address/{customer_id}',[CustomerController::class,'changeDeliveryAddress']);
 
 });
 
@@ -269,9 +267,13 @@ Route::post('customer/login-dashboard',[LoginController::class,'CustomerloginDas
 
 //waiter
 Route::get('waiter-with-orders',[WaiterController::class,'getWaiter']);
+Route::get('waiter-with-orders/{emp_id}',[WaiterController::class,'getDetails']);
 
 //customer
 Route::post('register-customer',[CustomerController::class,'customerInsert']);
-Route::get('customer-order/{customer_id}',[CustomerController::class,'customerOrder']);
-Route::get('get-delivery-address/{customer_id}',[CustomerController::class,'customerDeliveryAddress']);
 
+//categories
+Route::get('categories',[CategoryController::class,'categories'])->name('admin.view-categories');
+
+//table
+Route::get('tables/{id}',[TableController::class,'tableList']);

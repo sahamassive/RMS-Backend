@@ -101,4 +101,26 @@ class WaiterController extends Controller
             'attendOrder' => $attendOrder
         ]);
     }
+
+    public function getDetails($emp_id){
+        $id = DB::table('pos_orders')
+                    ->where('waiter_id', $emp_id)
+                    ->where('status', 'pending')
+                    ->orWhere('status', 'running')
+                    ->select('order_id')
+                    ->get();
+        $data = DB::table('pos_orders')
+                    ->join('order_details', 'pos_orders.order_id', 'order_details.order_id')
+                    ->join('food', 'order_details.item_code', 'food.item_code')
+                    ->join('tables', 'tables.table_id', 'pos_orders.table_id')
+                    ->where('pos_orders.waiter_id', $emp_id)
+                    ->where('pos_orders.status', 'pending')
+                    ->orWhere('pos_orders.status', 'running')
+                    ->select('pos_orders.*', 'food.name', 'food.image', 'tables.table_name', 'tables.table_type')
+                    ->get();
+        return response()->json([
+            'id' => $id,
+            'data' => $data
+        ]);
+    }
 }

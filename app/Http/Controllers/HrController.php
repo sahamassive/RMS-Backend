@@ -46,7 +46,7 @@ class HrController extends Controller
                 $data=new Cleaner();
                 $data->emp_id='Cl-'.'05'.date('hi').$id;;
             
-              }else if($type=="supr-admin" ||$type=='admin' || $type=='sub-admin'){
+              }else if($type=="super-admin" ||$type=='admin' || $type=='sub-admin'){
                 $data=new Admin();
                 $data->admin_type=$type;
                 $data->emp_id='Ad-'.'11'.date('hi').$id;;
@@ -159,5 +159,4 @@ class HrController extends Controller
       }
       return response()->json($data);
     }
-
 }

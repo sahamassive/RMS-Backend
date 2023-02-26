@@ -27,7 +27,6 @@ class LoginController extends Controller
             $user = $query::where('email', $request->email)->first();
         }
 
-       
         if($user){
             if (Hash::check($request->password,$user->password)) {
                 $token=  $user->createToken($request->device_name)->plainTextToken;
@@ -65,7 +64,7 @@ class LoginController extends Controller
                 $response =[
                     'message'=>'success',
                     'token'=>$token,
-                    'type'=> 'customer',
+                    'type'=> 'Customer',
                     'customer_id' => $user->customer_id
                 ];
                 return response($response,201);

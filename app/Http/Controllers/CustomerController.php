@@ -56,6 +56,43 @@ class CustomerController extends Controller
     public function customerDeliveryAddress($customer_id){
         $data=DeliveryAddress::where('customer_id',$customer_id)->first();
         return response($data);
+    }
 
+    public function changeDeliveryAddress(Request $request, $customer_id){
+        $data=DeliveryAddress::where('customer_id',$customer_id)->first();
+        if(!$data){
+            $data = new DeliveryAddress();
+            $data->customer_id = $customer_id;
+            $data->city = $request->city;
+            $data->indication = $request->indication;
+            $data->address = $request->address;
+            if($data->save()){
+                return response()->json([
+                    'msg'=>'Successfull'
+                ]);
+            }
+            else{
+                return response()->json([
+                    'msg'=>'Error Occurred'
+                ]);
+            }
+        }
+        else{
+            $data->city = $request->city;
+            $data->indication = $request->indication;
+            $data->address = $request->address;
+            if($data->update()){
+                return response()->json([
+                    //success message
+                    'msg'=>'Updated Successfully'
+                ]);
+            }
+            else{
+                return response()->json([
+                    //error message
+                    'msg'=>'Error Occurred'
+                ]);
+            }
+        }
     }
 }

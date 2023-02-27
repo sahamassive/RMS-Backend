@@ -204,6 +204,14 @@ Route::get('customer-order/{customer_id}',[CustomerController::class,'customerOr
 Route::get('get-delivery-address/{customer_id}',[CustomerController::class,'customerDeliveryAddress']);
 Route::post('change-delivery-address/{customer_id}',[CustomerController::class,'changeDeliveryAddress']);
 
+//discout-apply
+Route::get('get-msp/{id}',[OrderController::class,'getMsp']);
+Route::get('get-coupon-discount/{id}',[OrderController::class,'getCouponDiscount']);
+
+
+//order
+Route::get('order/recent-order',[OrderController::class,'recentOrder']);
+
 });
 
 
@@ -263,8 +271,7 @@ Route::get('restaurant/{id}/{city}',[RestaurantController::class,'getDefBranch']
 //order
 Route::post('order-store',[OrderController::class,'orderInsert']);
 Route::get('orders',[OrderController::class,'index']);
-Route::get('order/recent-order',[OrderController::class,'recentOrder']);
-Route::get('get-msp/{id}',[OrderController::class,'getMsp']);
+
 
 
 

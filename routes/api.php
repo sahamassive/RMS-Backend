@@ -106,6 +106,7 @@ Route::post('food-insert',[FoodController::class,'foodInsert']);
 //Employee
 Route::post('employee-insert',[HrController::class,'employeeInsert']);
 Route::get('get-employee/{filter}',[HrController::class,'getEmployee']);
+Route::get('get-all-employee',[HrController::class,'getAllEmployee']);
 Route::post('department-insert',[HrController::class,'departmentInsert']);
 Route::get('departments',[HrController::class,'getDepartment']);
 Route::post('leave-insert',[HrController::class,'leaveInsert']);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Coupon;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\PosOrder;
@@ -88,6 +89,7 @@ class OrderController extends Controller
                     ->whereDate('created_at', date("Y-m-d"))
                     ->groupBy('order_id')
                     ->get();
+
         $data = DB::table('order_details')
                     ->join('orders','order_details.order_id', '=', 'orders.order_id')
                     ->join('food','order_details.item_code', '=', 'food.item_code')
@@ -110,5 +112,25 @@ class OrderController extends Controller
         }else{
             return response()->json('not a member');
         }
+    }
+    public function getCouponDiscount($id){
+        $data=Coupon::where('coupon_code',$id)->where('status','0')->where('quantity','>','0')->first();
+        if($data){
+            if($data->quantity ==1){
+            
+                $data->status='1';
+            
+            $data->quantity=0;
+            $data->update();
+            return response()->json($data->discount_amount);
+        }else{
+            $data->quantity=$data->quantity-1;
+            $data->update();
+            return response()->json($data->discount_amount);
+        }
+        }else {
+            return response()->json('Not-Valid');  
+        }
+       
     }
 }

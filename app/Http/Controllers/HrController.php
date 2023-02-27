@@ -263,64 +263,83 @@ class HrController extends Controller
       }
     }
 
-        //update profile information
-        public function customerProfile(Request $request, $type, $emp_id){
-          $data = $this->search($type, $emp_id);
-          $data->name = $request->name;
-          $data->email = $request->email;
-          $data->phone = $request->phone;
-          $data->address = $request->address;
-          $data->delivery_address = $request->delivery_address;
-    
-          //check image
-          $image=$request->file('image');
-          if($image)
-          {
-              $extension = $image->getClientOriginalExtension();
-              if(
-                  $extension == 'jpeg' || $extension == 'JPEG' ||
-                  $extension == 'jpg' || $extension == 'JPG' ||
-                  $extension == 'img' || $extension == 'IMG' ||
-                  $extension == 'png' || $extension == 'PNG'
-              ){
-                  //image path
-                  $path2 = public_path('customer/medium/' . $request->image);
-                  $path3 = public_path('customer/small/' . $request->image);
-                  if (File::exists($path2)) {
-                      //delete prevoius image
-                      @unlink($path2);	
-                      @unlink($path3);	
-                  }
-                  //change image name
-                  $imageName = time() . "." . $extension;
-                  //store image
-                  $mediumimagePath = public_path('customer/medium/'.$imageName);
-                  $smallimagePath  = public_path('customer/small/'.$imageName);
-    
-                  //customize image size
-                  Image::make($image)->resize(500,500)->save($mediumimagePath);
-                  Image::make($image)->resize(250,250)->save($smallimagePath);
-    
-                  $data->image = $imageName;
+    //update profile information
+    public function customerProfile(Request $request, $type, $emp_id){
+      $data = $this->search($type, $emp_id);
+      $data->name = $request->name;
+      $data->email = $request->email;
+      $data->phone = $request->phone;
+      $data->address = $request->address;
+      $data->delivery_address = $request->delivery_address;
+
+      //check image
+      $image=$request->file('image');
+      if($image)
+      {
+          $extension = $image->getClientOriginalExtension();
+          if(
+              $extension == 'jpeg' || $extension == 'JPEG' ||
+              $extension == 'jpg' || $extension == 'JPG' ||
+              $extension == 'img' || $extension == 'IMG' ||
+              $extension == 'png' || $extension == 'PNG'
+          ){
+              //image path
+              $path2 = public_path('customer/medium/' . $request->image);
+              $path3 = public_path('customer/small/' . $request->image);
+              if (File::exists($path2)) {
+                  //delete prevoius image
+                  @unlink($path2);	
+                  @unlink($path3);	
               }
-              else{
-                  return response()->json([
-                      //error message
-                      'msg'=>'Your inserted file is not an image.'
-                  ]);
-              }
-            }
-    
-    
-            if($data->update()){
-                return response()->json([
-                    'msg'=>'Updated Successfully'
-                    ]);
-            }
-            else{
-                return response()->json([
-                    'msg'=>'Error Occured'
-                    ]);
-            }
+              //change image name
+              $imageName = time() . "." . $extension;
+              //store image
+              $mediumimagePath = public_path('customer/medium/'.$imageName);
+              $smallimagePath  = public_path('customer/small/'.$imageName);
+
+              //customize image size
+              Image::make($image)->resize(500,500)->save($mediumimagePath);
+              Image::make($image)->resize(250,250)->save($smallimagePath);
+
+              $data->image = $imageName;
+          }
+          else{
+              return response()->json([
+                  //error message
+                  'msg'=>'Your inserted file is not an image.'
+              ]);
+          }
         }
+
+
+        if($data->update()){
+            return response()->json([
+                'msg'=>'Updated Successfully'
+                ]);
+        }
+        else{
+            return response()->json([
+                'msg'=>'Error Occured'
+                ]);
+        }
+    }
+
+    //get all employees information
+    public function getAllEmployee(){
+      $admin = Admin::all()->count();
+      $waiter = Waiter::all()->count();
+      $manager = Manager::all()->count();
+      $delivery_man = Delivery_man::all()->count();
+      $cleaner = Cleaner::all()->count();
+      $chef = Chef::all()->count();
+
+      return response()->json([
+        'admin'=>$admin,
+        'waiter'=>$waiter,
+        'manager' => $manager,
+        'delivery_man'=> $delivery_man,
+        'cleaner'=> $cleaner,
+        'chef' => $chef
+      ]);
+    }
 }

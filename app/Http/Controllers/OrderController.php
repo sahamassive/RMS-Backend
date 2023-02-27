@@ -86,8 +86,8 @@ class OrderController extends Controller
         $id = OrderDetail::select('order_id')
                     ->where('status', 'pending')
                     ->whereDate('created_at', date("Y-m-d"))
+                    ->groupBy('order_id')
                     ->get();
-        $id=$id->unique('order_id');
         $data = DB::table('order_details')
                     ->join('orders','order_details.order_id', '=', 'orders.order_id')
                     ->join('food','order_details.item_code', '=', 'food.item_code')
@@ -98,7 +98,7 @@ class OrderController extends Controller
                     ->get();
         return response()->json([
             'data' => $data,
-            'id' => $id
+            'recent_id' => $id
         ]);
     }
 

@@ -97,14 +97,21 @@ class HrController extends Controller
     public function getEmployee($filter){
       if($filter=='waiter'){
         $data = Waiter::get()->toArray();
-      }else if($filter =='chef'){
+      }
+      else if($filter =='chef'){
         $data = Chef::get()->toArray();
-      }else if($filter =='manager'){
+      }
+      else if($filter =='manager'){
         $data = Manager::get()->toArray();
-      }else if($filter =='delivery_men'){
+      }
+      else if($filter =='delivery_men'){
         $data = Delivery_man::get()->toArray();
-      }else if($filter =='cleaner'){
+      }
+      else if($filter =='cleaner'){
         $data = Cleaner::get()->toArray();
+      }
+      else if($filter =='super-admin' || $filter=='admin' || $filter=='sub-admin'){
+        $data = Admin::where('admin_type', $filter)->get()->toArray();
       }
       return response()->json($data);
     }
@@ -138,7 +145,7 @@ class HrController extends Controller
         ]);
     }
 
-    //earch in database 
+    //search in database 
     public function search($type, $emp_id){
       if($type=='Waiter'){
         $data = Waiter::where('emp_id', $emp_id)->first();
@@ -158,7 +165,7 @@ class HrController extends Controller
       else if($type =='Customer'){
         $data = Customer::where('customer_id', $emp_id)->first();
       }
-      else if($type=="Super-Admin" ||$type=='Admin' || $type=='Sub-Admin'){
+      else if($type=="Super-Admin" || $type=='Admin' || $type=='Sub-Admin'){
         $data = Admin::where('emp_id', $emp_id)->first();
       }
       return $data;

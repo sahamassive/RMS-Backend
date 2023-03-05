@@ -122,9 +122,11 @@ class ChefController extends Controller
                         ->join('ingredients', 'ingredients.id', '=', 'chef_inventories.ingredient_id')
                         ->where('chef_inventories.emp_id',$emp_id)
                         ->whereBetween('chef_inventories.created_at', [$res1, $res])
-                        ->select('chef_inventories.*', 'ingredients.ingredient')
+                        ->select(DB::raw("Sum(chef_inventories.quantity) as quantity"),
+                                 DB::raw("Sum(chef_inventories.used_quantity ) as used_quantity"),
+                                 DB::raw("Sum(chef_inventories.return_quantity ) as return_quantity"),
+                                 'chef_inventories.ingredient_id', 'chef_inventories.unit', 'ingredients.ingredient')
                         ->groupBy('chef_inventories.ingredient_id')
-                        ->orderBy('chef_inventories.created_at','DESC')
                         ->get();
         }
         return response()->json($data);
@@ -250,6 +252,38 @@ class ChefController extends Controller
         if($data->update() &  $data2->update()){
             return response()->json([
                 'msg' => 'Status Updated'
+            ]);
+        }
+    }
+
+    //chef ruturn inventory 
+    public function ChefReturnInventory($emp_id, $ingredient_id, $inHand){
+        $chef = Chef_inventory::where('emp_id', $emp_id)
+                                ->where('ingredient_id', $ingredient_id)
+                                ->whereDate('created_at', date("Y-m-d"))
+                                ->first();
+
+        $chef->return_quantity = $inHand;
+
+        if($chef->update()){
+            $data = Inventory::where('ingredient_id', $ingredient_id)->first();
+
+            $data->current_quantity = $data->current_quantity + $inHand;
+
+            if($data->update()){
+                return response()->json([
+                    'msg' => 'Status Updated'
+                ]);
+            }
+            else{
+                return response()->json([
+                    'msg' => 'Error Occured'
+                ]);
+            }
+        }
+        else{
+            return response()->json([
+                'msg' => 'Error'
             ]);
         }
     }

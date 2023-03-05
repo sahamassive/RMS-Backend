@@ -69,6 +69,7 @@ class HrController extends Controller
 
 
         }
+            $data->restaurant_id=$request->restaurant_id;
             $data->first_name=$request->first_name;
             $data->last_name=$request->last_name;
             $data->email=$request->email;

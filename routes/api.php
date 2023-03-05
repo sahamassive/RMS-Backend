@@ -52,6 +52,9 @@ Route::get('total-sales-month-wise/{id}',[DashboardController::class,'totalSales
 Route::get('total-sales-day-wise/{id}',[DashboardController::class,'totalSalesDaykWise']);
 Route::get('year-wise-comparison/{id}',[DashboardController::class,'yearWiseComparison']);
 Route::get('today-data/{id}',[DashboardController::class,'todayData']);
+Route::get('filter-data/{start}/{end}/{id}',[DashboardController::class,'filterData']);
+Route::get('filter-chef-data/{chefId}/{id}',[DashboardController::class,'filterDataChef']);
+Route::get('filter-sell-data/{start}/{end}/{id}',[DashboardController::class,'filterDataSell']);
 
 //branch
 
@@ -98,7 +101,7 @@ Route::post('category-insert',[CategoryController::class,'categoryInsert']);
 
 
 //food
-Route::get('food-edit/{id}',[FoodController::class,'foodEdit']);
+
 Route::post('food-edit/{id}',[FoodController::class,'foodUpdate']);
 Route::post('food-insert',[FoodController::class,'foodInsert']);
 
@@ -232,6 +235,7 @@ Route::get('category-foods/{id}/{rid}/{bid}',[FoodController::class,'foodByCateg
 
 Route::get('foods',[FoodController::class,'foods']);
 Route::get('quick-foods/{id}/{bid}',[FoodController::class,'quickfoods']);
+Route::get('food-edit/{id}',[FoodController::class,'foodEdit']);
 
 Route::get('sp-foods',[FoodController::class,'spFoods']);
 

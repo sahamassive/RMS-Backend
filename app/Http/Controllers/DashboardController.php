@@ -38,12 +38,77 @@ class DashboardController extends Controller
 
        ->get();
 
+       $today_ingredient =DB::table('chef_inventories')
+       ->join('ingredients', 'chef_inventories.ingredient_id', 'ingredients.id')
+       ->select(DB::raw("Sum(chef_inventories.quantity) as quantity"),
+        DB::raw("Sum(chef_inventories.used_quantity ) as used_quantity"),
+        DB::raw("Sum(chef_inventories.return_quantity ) as return_quantity"),'chef_inventories.unit','ingredients.ingredient')
+       ->whereDate('chef_inventories.created_at',  Carbon::today())
+       ->groupBy('chef_inventories.ingredient_id')
+       ->where('ingredients.restaurant_id',$id)
+      ->get();
+
+      $month_ingredient =DB::table('chef_inventories')
+      ->join('ingredients', 'chef_inventories.ingredient_id', 'ingredients.id')
+      ->select(DB::raw("Sum(chef_inventories.quantity) as quantity"),
+      DB::raw("Sum(chef_inventories.used_quantity ) as used_quantity"),
+      DB::raw("Sum(chef_inventories.return_quantity ) as return_quantity"),'chef_inventories.unit','ingredients.ingredient')
+
+      ->whereRaw('MONTH(chef_inventories.created_at) = ?', [date('m')])
+      ->whereRaw('YEAR(chef_inventories.created_at) = ?', [date('Y')])
+      ->groupBy('chef_inventories.ingredient_id')
+      ->where('ingredients.restaurant_id',$id)
+     ->get();
+
         return response()->json([
             'today_sell'=>$today_sell,
-            'today_items'=>$today_item
+            'today_items'=>$today_item,
+            'today_ingredient'=>$today_ingredient,
+            'month_ingredient'=>$month_ingredient
         ]);
 
     }
+
+    public function filterData($start,$end,$id){
+        $data =DB::table('chef_inventories')
+        ->join('ingredients', 'chef_inventories.ingredient_id', 'ingredients.id')
+        ->select(DB::raw("Sum(chef_inventories.quantity) as quantity"),
+        DB::raw("Sum(chef_inventories.used_quantity ) as used_quantity"),
+        DB::raw("Sum(chef_inventories.return_quantity ) as return_quantity"),'chef_inventories.unit','ingredients.ingredient')
+  
+        ->whereBetween('chef_inventories.created_at', [$start, $end])
+        ->groupBy('chef_inventories.ingredient_id')
+        ->where('ingredients.restaurant_id',$id)
+       ->get();
+       return response()->json($data);
+    }
+    public function filterDataChef($chefId,$id){
+        $data =DB::table('chef_inventories')
+        ->join('ingredients', 'chef_inventories.ingredient_id', 'ingredients.id')
+        ->select(DB::raw("Sum(chef_inventories.quantity) as quantity"),
+         DB::raw("Sum(chef_inventories.used_quantity ) as used_quantity"),
+         DB::raw("Sum(chef_inventories.return_quantity ) as return_quantity"),'chef_inventories.unit','ingredients.ingredient')
+        ->whereDate('chef_inventories.created_at',  Carbon::today())
+        ->groupBy('chef_inventories.ingredient_id')
+        ->where('chef_inventories.emp_id',$chefId)
+        ->where('ingredients.restaurant_id',$id)
+       ->get(); 
+       return response()->json($data);
+    } 
+    public function filterDataSell($start,$end,$id){
+        $data =DB::table('order_details')
+        ->join('food', 'order_details.item_code', 'food.item_code')
+        ->select(DB::raw("Count(order_details.item_code) as item_count"),DB::raw("Sum(order_details.quantity) as quantity"),'food.name','food.image','food.price')
+       
+        ->whereBetween('order_details.created_at', [$start, $end])
+        ->groupBy('order_details.item_code')
+        ->where('order_details.status','pending')
+        ->where('food.restaurant_id',$id)
+
+       ->get();
+       return response()->json($data);
+    }
+    
     public function totalSalesMonthWise($id){
         $sales =DB::table('orders')->select(DB::raw("Sum(grand_price) as total"), DB::raw("MONTHNAME(created_at) as month_name"))
         ->whereYear('created_at', date('Y'))

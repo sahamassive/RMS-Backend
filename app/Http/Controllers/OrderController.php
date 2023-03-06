@@ -23,9 +23,14 @@ class OrderController extends Controller
                     ->join('food', 'order_details.food_id', '=', 'food.id')
                     ->select('orders.*', 'food.*', 'order_details.*')
                     ->get();
+        $chef = DB::table('chef_orders')
+                    ->join('orders', 'orders.order_id', '=', 'chef_orders.order_id')
+                    ->select('orders.order_id', 'chef_orders.emp_id')
+                    ->get();
         return response()->json([
             'data' => $data,
-            'id' => $id
+            'id' => $id,
+            'chefs' => $chef
         ]);
     }
 

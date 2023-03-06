@@ -8,6 +8,7 @@ use App\Models\Food;
 use App\Models\Category;
 use App\Models\Section;
 use App\Models\Brand;
+use App\Models\MultipleImage;
 use Auth;
 use Image;
 use Illuminate\Support\Facades\DB;
@@ -84,6 +85,15 @@ class FoodController extends Controller
                     ->first(); 
         return response()->json($food);
     } 
+    public function getSingleFood($id){
+        $food = Food::where('item_code',$id)->select('name','image')->first();
+        return response()->json($food);
+    } 
+    public function getMultipleImage($item_code){
+        $food = MultipleImage::where('item_code',$item_code)->select('images')->get();
+        return response()->json($food);
+    } 
+    
     
 public function foodUpdate(Request $request, $id){
     $food = Food::findorfail($id);
@@ -385,10 +395,44 @@ public function foodUpdate(Request $request, $id){
 
 
         }
-        $food->save();
-        return response()->json([
-            'msg'=>'Food Inserted Successfully'
-            ]);
 
+        if ($request->hasFile('images')) {
+            $images = $request->file('images');
+         
+        
+            foreach ($images as $image) {
+
+
+                $extension = $image->getClientOriginalExtension();
+                //Generate New Image Name
+                $imageName = rand(111,99999).'.'.$extension;
+             
+                $multiple =public_path('foods/multiple/'.$imageName);
+                Image::make($image)->resize(250,250)->save($multiple);
+                $multipleImage= new MultipleImage();
+                $multipleImage->restaurant_id=$request->restaurant_id;
+                $multipleImage->item_code=$request->item_code;
+                $multipleImage->images = $imageName;
+         
+           
+              $multipleImage->save();
+            }
+        
+          
+          }
+        if($food->save()){
+            return response()->json([
+                'msg'=>'Food Inserted Successfully'
+                ]);
+    
+        }else{
+            return response()->json([
+                'msg'=>'Error'
+                ]);
+    
+        }
+        
+       
         }
     }
+    

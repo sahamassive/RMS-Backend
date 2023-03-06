@@ -102,6 +102,8 @@ Route::post('category-insert',[CategoryController::class,'categoryInsert']);
 
 Route::post('food-edit/{id}',[FoodController::class,'foodUpdate']);
 Route::post('food-insert',[FoodController::class,'foodInsert']);
+Route::get('food-item/{id}',[FoodController::class,'getSingleFood']);
+Route::post('submit-review',[CustomerController::class,'submitReview']);
 
 //Employee
 Route::post('employee-insert',[HrController::class,'employeeInsert']);
@@ -114,6 +116,7 @@ Route::get('profile/{type}/{emp_id}',[HrController::class,'profileInfo']);
 Route::post('edit-profile/{type}/{emp_id}',[HrController::class,'updateProfileInfo']);
 Route::post('change-password/{type}/{emp_id}',[HrController::class,'updatePassword']);
 Route::post('edit-customer-profile/{type}/{emp_id}',[HrController::class,'customerProfile']);
+
 
 //restaurants
 Route::post('restaurant-insert',[RestaurantController::class,'restaurantInsert']);
@@ -222,7 +225,7 @@ Route::get('category-foods/{id}/{rid}/{bid}',[FoodController::class,'foodByCateg
 Route::get('foods',[FoodController::class,'foods']);
 Route::get('quick-foods/{id}/{bid}',[FoodController::class,'quickfoods']);
 Route::get('food-edit/{id}',[FoodController::class,'foodEdit']);
-
+Route::get('multiple-images/{item_code}',[FoodController::class,'getMultipleImage']);
 Route::get('sp-foods',[FoodController::class,'spFoods']);
 
 Route::get('quick-foods-branch/{id}/{bid}',[FoodController::class,'quickfoodsBranch']);

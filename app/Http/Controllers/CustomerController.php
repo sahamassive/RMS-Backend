@@ -7,6 +7,7 @@ use App\Models\Customer;
 use App\Models\DeliveryAddress;
 use App\Models\Order;
 use App\Models\OrderDetail;
+use App\Models\Review;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
@@ -39,12 +40,12 @@ class CustomerController extends Controller
                     ->where('customer_id',$customer_id)
                     ->where('order_status','pending')
                     ->orWhere('order_status', 'running')
-                    ->select('order_id')
+                    
                     ->get();
         $data = DB::table('orders')
                     ->join('order_details', 'orders.order_id', '=', 'order_details.order_id')
                     ->join('food', 'food.item_code', '=', 'order_details.item_code')
-                    ->select('food.name', 'food.image', 'order_details.*', 'orders.*')
+                    ->select('food.name','food.price','food.item_code', 'food.image', 'order_details.*')
                     ->where('orders.customer_id', $customer_id)
                     ->get();
         return response()->json([
@@ -94,6 +95,28 @@ class CustomerController extends Controller
                 ]);
             }
         }
+    }
+    public function submitReview(Request $request){
+        $data=new Review();
+        $data->restaurant_id=$request->restaurant_id;
+        $data->customer_id=$request->customer_id;
+        $data->item_code=$request->item_code;
+        $data->rating=$request->rating;
+        $data->comment=$request->comment;
+        if($data->save()){
+            return response()->json([
+                //success message
+                'msg'=>'Review Submitted Successfully'
+            ]);
+        }
+        else{
+            return response()->json([
+                //error message
+                'msg'=>'Error Occurred'
+            ]);
+        }
+
+
     }
 
 }

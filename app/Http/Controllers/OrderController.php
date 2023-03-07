@@ -37,13 +37,10 @@ class OrderController extends Controller
     //insert new order
     public function orderInsert(Request $request){
         $detail=$request->details;
-        $extension = '0';
-        for($i = 0; $i < $request->item - 1; $i++){
-            $extension .= "0";
-        }
         $id=rand ( 10000 , 99999 );
+        
         if($request->pickup_method=='pos'){
-            $orderId='Pos-'.date('hi').$id.'-'.$extension;
+            $orderId='Pos-'.date('hi').$id;
             $customerId='pos-order';
             $pos=new PosOrder();
             $pos->restaurant_id=$request->restaurant_id;
@@ -55,7 +52,7 @@ class OrderController extends Controller
             $pos->waiter_id=$request->waiter_id;
             $pos->save();
         }else{
-            $orderId='Cus-'.date('hi').$id.'-'.$extension;
+            $orderId='Cus-'.date('hi').$id;
             $customerId=$request->customer_id;
         }
         

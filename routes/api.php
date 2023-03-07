@@ -268,6 +268,7 @@ Route::post('customer/login-dashboard',[LoginController::class,'CustomerloginDas
 //waiter
 Route::get('waiter-with-orders',[WaiterController::class,'getWaiter']);
 Route::get('waiter-with-orders/{emp_id}',[WaiterController::class,'getDetails']);
+Route::get('waiter-with-orders-count/{emp_id}',[WaiterController::class,'getOrdersCount']);
 
 //customer
 Route::post('register-customer',[CustomerController::class,'customerInsert']);

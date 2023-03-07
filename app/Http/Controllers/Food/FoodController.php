@@ -13,6 +13,8 @@ use Auth;
 use Image;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Carbon\Carbon;
+
 
 class FoodController extends Controller
 {
@@ -55,9 +57,17 @@ class FoodController extends Controller
   // $data=Item::where('restaurant_id',$id)->get();
   return response()->json($data);
     }
-    public function spFoods(){
-        $foods = Food::where('status','1')->get()->toArray();
-        return response()->json($foods);
+    public function spFoods($id){
+        $trending=DB::table('order_details')
+        ->join('food', 'order_details.item_code', 'food.item_code')
+        ->select('food.*',DB::raw("COUNT(order_details.item_code) as order_count"))
+         ->where('food.restaurant_id',$id)
+        ->whereBetween('order_details.created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
+        ->groupBy('order_details.item_code')
+        ->orderByRaw('count(*) DESC')
+        ->limit(4)
+        ->get();
+        return response()->json($trending);
     }
     public function foodByCategory($id,$rid,$bid){
         if($rid==$bid){
@@ -89,9 +99,27 @@ class FoodController extends Controller
         $food = Food::where('item_code',$id)->select('name','image')->first();
         return response()->json($food);
     } 
+    public function getReview($emp_id){
+        $reviews=DB::table('reviews')
+        ->join('food','food.item_code','reviews.item_code')
+        ->select('food.name','food.image','reviews.*')
+        ->where('reviews.customer_id',$emp_id)
+    
+        ->get();  
+        return response()->json($reviews);
+    }
     public function getMultipleImage($item_code){
         $food = MultipleImage::where('item_code',$item_code)->select('images')->get();
-        return response()->json($food);
+        $reviews=DB::table('reviews')
+                         ->join('customers','customers.customer_id','reviews.customer_id')
+                         ->select('customers.name','customers.image','reviews.*')
+                         ->where('reviews.item_code',$item_code)
+                         ->orderBy('reviews.rating','DESC')
+                         ->get();
+        return response()->json([
+            'food'=>$food,
+            'reviews'=>$reviews
+        ]);
     } 
     
     

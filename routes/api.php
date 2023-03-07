@@ -104,6 +104,7 @@ Route::post('food-edit/{id}',[FoodController::class,'foodUpdate']);
 Route::post('food-insert',[FoodController::class,'foodInsert']);
 Route::get('food-item/{id}',[FoodController::class,'getSingleFood']);
 Route::post('submit-review',[CustomerController::class,'submitReview']);
+Route::get('get-review/{emp_id}',[FoodController::class,'getReview']);
 
 //Employee
 Route::post('employee-insert',[HrController::class,'employeeInsert']);
@@ -226,7 +227,7 @@ Route::get('foods',[FoodController::class,'foods']);
 Route::get('quick-foods/{id}/{bid}',[FoodController::class,'quickfoods']);
 Route::get('food-edit/{id}',[FoodController::class,'foodEdit']);
 Route::get('multiple-images/{item_code}',[FoodController::class,'getMultipleImage']);
-Route::get('sp-foods',[FoodController::class,'spFoods']);
+Route::get('sp-foods/{id}',[FoodController::class,'spFoods']);
 
 Route::get('quick-foods-branch/{id}/{bid}',[FoodController::class,'quickfoodsBranch']);
 

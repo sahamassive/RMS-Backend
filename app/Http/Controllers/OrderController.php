@@ -67,6 +67,7 @@ class OrderController extends Controller
         $order->order_status = "pending";
         $order->item=$request->item;
         $order->total_price=$request->total;
+        $order->discount=$request->discount;
         $order->vat=$request->vat;
         $order->grand_price=$request->grand_price;
         $order->pickup_method=$request->pickup_method;

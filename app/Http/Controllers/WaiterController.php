@@ -118,7 +118,7 @@ class WaiterController extends Controller
         $data = DB::table('pos_orders')
                     ->join('order_details', 'pos_orders.order_id', 'order_details.order_id')
                     ->join('food', 'order_details.item_code', 'food.item_code')
-                    ->join('tables', 'tables.table_id', 'pos_orders.table_id')
+                    ->leftJoin('tables', 'tables.table_id', 'pos_orders.table_id')
                     ->where('pos_orders.waiter_id', $emp_id)
                     ->Where('pos_orders.status', 'running')
                     ->orWhere('pos_orders.status', 'pending')

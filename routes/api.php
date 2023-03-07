@@ -279,3 +279,5 @@ Route::get('categories',[CategoryController::class,'categories'])->name('admin.v
 
 //table
 Route::get('tables/{id}',[TableController::class,'tableList']);
+
+Route::post('/botman',[BotManController::class,'handle']);

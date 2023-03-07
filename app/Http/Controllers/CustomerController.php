@@ -40,13 +40,14 @@ class CustomerController extends Controller
                     ->where('customer_id',$customer_id)
                     ->where('order_status','pending')
                     ->orWhere('order_status', 'running')
-                    
+                    ->orderBy('id','DESC')
                     ->get();
         $data = DB::table('orders')
                     ->join('order_details', 'orders.order_id', '=', 'order_details.order_id')
                     ->join('food', 'food.item_code', '=', 'order_details.item_code')
                     ->select('food.name','food.price','food.item_code', 'food.image', 'order_details.*')
                     ->where('orders.customer_id', $customer_id)
+                    ->orderBy('orders.id','DESC')
                     ->get();
         return response()->json([
             'id' => $id,

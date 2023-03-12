@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Food;
 
 use App\Http\Controllers\Controller;
+use App\Models\BranchFood;
 use Illuminate\Http\Request;
 use App\Models\Food;
 use App\Models\Category;
@@ -47,12 +48,15 @@ class FoodController extends Controller
 
     public function quickfoodsBranch($id,$bid){
       
+        // $branch=BranchFood::select('food_id')->where('branch_id',$bid)->get();
+  
+        // return response()->json($branch);
+        $b=$bid;
         $data = Food::where('restaurant_id',$id)->whereNotExists(function ($query) {
             $query->select(DB::raw(1))
                   ->from('branch_food')
-               
                   ->whereRaw('branch_food.food_id = food.id');
-                
+                 
         })->get();
   // $data=Item::where('restaurant_id',$id)->get();
   return response()->json($data);

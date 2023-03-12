@@ -20,7 +20,7 @@ class CreateFoodTable extends Migration
             $table->integer('recipe_id');
             $table->string('restaurant_id');
             $table->integer('brand_id')->nullable();
-            $table->integer('food_review_id');
+            $table->integer('food_review_id')->nullable();
             $table->integer('item_code');
             $table->string('name');
             $table->string('image')->nullable();
